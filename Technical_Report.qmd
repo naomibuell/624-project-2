@@ -1,5 +1,5 @@
 ---
-title: "Project 2"
+title: "DATA 624 Project 2: Technical Report"
 format: html
 author: "Ali Ahmed, Andreina Arias, Kaylie Evans, Naomi Buell, and Zaneta Paulusova"
 date: "`r Sys.Date()`"
