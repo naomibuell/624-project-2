@@ -25,15 +25,39 @@ Please submit both Rpubs links and .rmd files or other readable formats for tech
 ```{r}
 #| label: load data
 
-StudentData <- read_excel("StudentData.xlsx")
-StudentEvaluation <- read_excel("StudentEvaluation.xlsx")
+StudentData <- read_excel("StudentData.xlsx") # Training data
+StudentEvaluation <- read_excel("StudentEvaluation.xlsx") # Test data
 ```
+
+## Clean and Tidy Data
+
+Impute and transform if necessary.
+
+-   Andreina to impute
+
+-   Adreina to check correlation, remove features that have correlation over some threshold.
 
 ## Exploratory Data Analysis
 
+-   Ali to Plot time plot
+
+-   Ali to plot decomposition plot
+
+-   
+
 ## Forecast
 
-### Export
+-   NB to try ARIMA
+
+-   NB to try ETS
+
+-   SNAIVE
+
+-   
+
+Compare fit and pick model to export.
+
+## Export
 
 ```{r}
 #| label: Export to Excel
@@ -42,3 +66,5 @@ StudentEvaluation <- read_excel("StudentEvaluation.xlsx")
 ```
 
 ## Conclusion
+
+\[RP\]
