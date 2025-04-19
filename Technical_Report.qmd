@@ -13,6 +13,7 @@ library(readxl)
 library(fpp3)
 library(caret)
 library(skimr)
+library(doParallel)
 ```
 
 ## Instructions
@@ -23,26 +24,47 @@ library(skimr)
 
 *Please submit both Rpubs links and .rmd files or other readable formats for technical and non-technical reports. Also submit the excel file showing the prediction of your models for pH.*
 
+## Introduction
+
+In this technical report, we will analyze the manufacturing process of ABC Beverage to understand the factors that influence the pH level of the product. We will build predictive models to forecast pH levels based on various predictors in the dataset. The goal is to provide insights into the manufacturing process and to create a model that can be used for future predictions.
+
 ## Load data
 
+First, we load the data.
+
 ```{r}
-#| label: load data
+#| label: load-data
 
 StudentData <- read_excel("StudentData.xlsx") # Training data
 StudentEvaluation <- read_excel("StudentEvaluation.xlsx") # Test data
 ```
 
+We browse the data below.
+
+```{r}
+#| label: browse-data
+
+StudentData |> skim()
+StudentEvaluation |> skim()
+```
+
 ## Clean and Tidy Data
+
+Mutate variable types if necessary.
+
+Browse and remove outliers if necessary.
 
 Impute and transform if necessary.
 
 -   Andreina to impute
 
--   Adreina to check correlation, remove features that have correlation over some threshold, and remove near zero variance predictors with `nearZeroVar()`.
+-   Adreina to check correlation, remove features that have correlation over some threshold
+
+-   Remove near zero variance predictors with `nearZeroVar()`.
 
 ## Exploratory Data Analysis
 
-<!--# Ali, since this data is not a time series, we can't do time plots or decomp like we discussed earlier. You can try exploring and plotting the data using `featurePlot(trainingData$x, trainingData$y)`, a correlation plot between all variables with `ggpairs()`, and/or other methods? -Naomi -->
+<!--# Ali, since this data is not a time series, we can't do time plots or decomp like we discussed earlier. You can try exploring and plotting the data using `featurePlot(trainingData$x, trainingData$y)`, a correlation plot between all variables with `ggpairs()`, and/or other methods? If relationships between predictors and PH look linear, we'd opt for linear models. If relationships look non-linear, we can try forecasting with non-linear or tree-based models. -Naomi -->
 
 -   Ali to Plot time plot
 
@@ -52,41 +74,29 @@ Impute and transform if necessary.
 
 We will try the following models:
 
--   Linear
+-   Linear regression models:
 
-    1.  PLS
+    -   PLS
 
-    2.  Ordinary Linear Regression
+    -   Elastic Net
 
-    3.  Robust Linear Regression
+-   Non-linear regression models:
 
-    4.  Elastic Net
+    -   KNN
 
--   Non-linear
+    -   Multivariate Adaptive Regression Splines (MARS)
 
-    1.  KNN
+-   Tree-based regression models:
 
-    2.  Neural network
+    -   Single Tree
 
-    3.  Multivariate Adaptive Regression Splines (MARS)
+    -   Model Tree
 
-    4.  Support Vector Machine (SVM)
+Since the data is relatively large, we will avoid heavy models like neural networks, support vector machines (SVM), or boosted trees. Since we have a lot of predictors, we opt for models that handle feature selection or dimensionality reduction like elastic net, PLS, and tree-based models. We also want model results to be easy to interpret for our non-technical report, so we focus on elastic net, MARS, and single/model trees.
 
--   Tree-based regression models
+<!--# Based on correlation plot in EDA section above, if relationships between predictors and PH look linear, we'd opt for linear models. If relationships look non-linear, we can try forecasting with non-linear or tree-based models. -Naomi -->
 
-    1.  Single Tree
-
-    2.  Model Tree
-
-    3.  Bagged Tree
-
-    4.  Random Forest
-
-    5.  Boosted Tree
-
-    6.  Cubist Tree
-
-Because the series is relatively long, we can afford to use a training and a test set. We select an ARIMA and an ETS model using the ARIMA() and ETS() functions.
+Also, because the data is relatively large, we can afford to use a training and a test set.
 
 ```{r}
 #| label: split-data
@@ -102,21 +112,26 @@ StudentData_train <- StudentData[trainingRows, ]
 StudentData_test <- StudentData[-trainingRows, ]
 ```
 
+Since these models take a long time to train, we'll utilize the `doParallel` package for speed.
+
 ```{r}
-#| label: fit-ARIMA-and-ETS-models
+#| label: parallel-processing
+#| warning: FALSE
+#| message: FALSE
 
-StudentData_fit <- StudentData_train |>
-    model(
-        arima = ARIMA(),
-        ets = ETS()
-    )
+cluster <- makeCluster(
+    detectCores() - 1
+)
 
-# Report on models selected
-atm1_3_fit
+registerDoParallel(
+    cluster
+)
+```
 
-# Save model names
-arima_model_1_3 <- atm1_3_fit$arima |> format()
-ets_model <- atm1_3_fit$ets |> format()
+Fitting models to the training data below.
+
+```{r}
+#| label: fit-models
 ```
 
 ## Compare model fit and select optimal model
