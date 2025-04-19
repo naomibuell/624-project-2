@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ali Ahmed, Andreina Arias, Kaylie Evans, Naomi Buell, and Zaneta Paulusova">
-<meta name="dcterms.date" content="2025-04-15">
+<meta name="dcterms.date" content="2025-04-19">
 
 <title>DATA 624 Project 2: Technical Report</title>
 <style>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 15, 2025</p>
+      <p class="date">April 19, 2025</p>
     </div>
   </div>
   
@@ -124,53 +124,1364 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpp3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'fpp3' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'tsibble':
+  method               from 
+  as_tibble.grouped_df dplyr
+── Attaching packages ──────────────────────────────────────────── fpp3 1.0.1 ──
+✔ tsibble     1.1.5     ✔ feasts      0.4.1
+✔ tsibbledata 0.4.1     ✔ fable       0.4.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tsibble' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'feasts' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'fabletools' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'fable' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ───────────────────────────────────────────────── fpp3_conflicts ──
+✖ lubridate::date()    masks base::date()
+✖ dplyr::filter()      masks stats::filter()
+✖ tsibble::intersect() masks base::intersect()
+✖ tsibble::interval()  masks lubridate::interval()
+✖ dplyr::lag()         masks stats::lag()
+✖ tsibble::setdiff()   masks base::setdiff()
+✖ tsibble::union()     masks base::union()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'caret' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice
+
+Attaching package: 'caret'
+
+The following objects are masked from 'package:fabletools':
+
+    MAE, RMSE
+
+The following object is masked from 'package:purrr':
+
+    lift</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: foreach
+
+Attaching package: 'foreach'
+
+The following objects are masked from 'package:purrr':
+
+    accumulate, when
+
+Loading required package: iterators
+Loading required package: parallel</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RWeka)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'rpart' was built under R version 4.3.3</code></pre>
+</div>
 </div>
 <section id="instructions" class="level2">
 <h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
-<p>This is role playing. I am your new boss. I am in charge of production at ABC Beverage and you are a team of data scientists reporting to me. My leadership has told me that new regulations are requiring us to understand our manufacturing process, the predictive factors and be able to report to them our predictive model of PH.</p>
-<p>Please use the historical data set I am providing. Build and report the factors in BOTH a technical and non-technical report. I like to use Word and Excel. Please provide your non-technical report in a business friendly readable document and your predictions in an Excel readable format. The technical report should show clearly the models you tested and how you selected your final approach.</p>
-<p>Please submit both Rpubs links and .rmd files or other readable formats for technical and non-technical reports. Also submit the excel file showing the prediction of your models for pH.</p>
+<p><em>This is role playing. I am your new boss. I am in charge of production at ABC Beverage and you are a team of data scientists reporting to me. My leadership has told me that new regulations are requiring us to understand our manufacturing process, the predictive factors and be able to report to them our predictive model of PH.</em></p>
+<p><em>Please use the historical data set I am providing. Build and report the factors in BOTH a technical and non-technical report. I like to use Word and Excel. Please provide your non-technical report in a business friendly readable document and your predictions in an Excel readable format. The technical report should show clearly the models you tested and how you selected your final approach.</em></p>
+<p><em>Please submit both Rpubs links and .rmd files or other readable formats for technical and non-technical reports. Also submit the excel file showing the prediction of your models for pH.</em></p>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In this technical report, we will analyze the manufacturing process of ABC Beverage to understand the factors that influence the pH level of the product. We will build predictive models to forecast pH levels based on various predictors in the dataset. The goal is to provide insights into the manufacturing process and to create a model that can be used for future predictions.</p>
 </section>
 <section id="load-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-data">Load data</h2>
+<p>First, we load the data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentData.xlsx"</span>) <span class="co"># Training data</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentEvaluation.xlsx"</span>) <span class="co"># Test data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentData.xlsx"</span>) <span class="co"># Training data</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentEvaluation.xlsx"</span>) <span class="co"># Test data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We browse the data below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">StudentData</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">2571</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">33</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">32</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Brand Code</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Carb Volume</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">5.37</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">5.04</td>
+<td style="text-align: right;">5.29</td>
+<td style="text-align: right;">5.35</td>
+<td style="text-align: right;">5.45</td>
+<td style="text-align: right;">5.70</td>
+<td style="text-align: left;">▁▆▇▅▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fill Ounces</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">23.97</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">23.63</td>
+<td style="text-align: right;">23.92</td>
+<td style="text-align: right;">23.97</td>
+<td style="text-align: right;">24.03</td>
+<td style="text-align: right;">24.32</td>
+<td style="text-align: left;">▁▂▇▂▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PC Volume</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0.28</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.24</td>
+<td style="text-align: right;">0.27</td>
+<td style="text-align: right;">0.31</td>
+<td style="text-align: right;">0.48</td>
+<td style="text-align: left;">▁▃▇▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Carb Pressure</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">68.19</td>
+<td style="text-align: right;">3.54</td>
+<td style="text-align: right;">57.00</td>
+<td style="text-align: right;">65.60</td>
+<td style="text-align: right;">68.20</td>
+<td style="text-align: right;">70.60</td>
+<td style="text-align: right;">79.40</td>
+<td style="text-align: left;">▁▅▇▃▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Carb Temp</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">141.09</td>
+<td style="text-align: right;">4.04</td>
+<td style="text-align: right;">128.60</td>
+<td style="text-align: right;">138.40</td>
+<td style="text-align: right;">140.80</td>
+<td style="text-align: right;">143.80</td>
+<td style="text-align: right;">154.00</td>
+<td style="text-align: left;">▁▅▇▃▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PSC</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.27</td>
+<td style="text-align: left;">▆▇▃▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PSC Fill</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">0.12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">0.26</td>
+<td style="text-align: right;">0.62</td>
+<td style="text-align: left;">▆▇▃▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PSC CO2</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.24</td>
+<td style="text-align: left;">▇▅▂▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mnf Flow</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">24.57</td>
+<td style="text-align: right;">119.48</td>
+<td style="text-align: right;">-100.20</td>
+<td style="text-align: right;">-100.00</td>
+<td style="text-align: right;">65.20</td>
+<td style="text-align: right;">140.80</td>
+<td style="text-align: right;">229.40</td>
+<td style="text-align: left;">▇▁▁▇▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Carb Pressure1</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">122.59</td>
+<td style="text-align: right;">4.74</td>
+<td style="text-align: right;">105.60</td>
+<td style="text-align: right;">119.00</td>
+<td style="text-align: right;">123.20</td>
+<td style="text-align: right;">125.40</td>
+<td style="text-align: right;">140.20</td>
+<td style="text-align: left;">▁▃▇▂▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fill Pressure</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">47.92</td>
+<td style="text-align: right;">3.18</td>
+<td style="text-align: right;">34.60</td>
+<td style="text-align: right;">46.00</td>
+<td style="text-align: right;">46.40</td>
+<td style="text-align: right;">50.00</td>
+<td style="text-align: right;">60.40</td>
+<td style="text-align: left;">▁▁▇▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hyd Pressure1</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">12.44</td>
+<td style="text-align: right;">12.43</td>
+<td style="text-align: right;">-0.80</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">11.40</td>
+<td style="text-align: right;">20.20</td>
+<td style="text-align: right;">58.00</td>
+<td style="text-align: left;">▇▅▂▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hyd Pressure2</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">20.96</td>
+<td style="text-align: right;">16.39</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">28.60</td>
+<td style="text-align: right;">34.60</td>
+<td style="text-align: right;">59.40</td>
+<td style="text-align: left;">▇▂▇▅▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hyd Pressure3</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">20.46</td>
+<td style="text-align: right;">15.98</td>
+<td style="text-align: right;">-1.20</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">27.60</td>
+<td style="text-align: right;">33.40</td>
+<td style="text-align: right;">50.00</td>
+<td style="text-align: left;">▇▁▃▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hyd Pressure4</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">96.29</td>
+<td style="text-align: right;">13.12</td>
+<td style="text-align: right;">52.00</td>
+<td style="text-align: right;">86.00</td>
+<td style="text-align: right;">96.00</td>
+<td style="text-align: right;">102.00</td>
+<td style="text-align: right;">142.00</td>
+<td style="text-align: left;">▁▃▇▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Filler Level</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">109.25</td>
+<td style="text-align: right;">15.70</td>
+<td style="text-align: right;">55.80</td>
+<td style="text-align: right;">98.30</td>
+<td style="text-align: right;">118.40</td>
+<td style="text-align: right;">120.00</td>
+<td style="text-align: right;">161.20</td>
+<td style="text-align: left;">▁▃▅▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Filler Speed</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">3687.20</td>
+<td style="text-align: right;">770.82</td>
+<td style="text-align: right;">998.00</td>
+<td style="text-align: right;">3888.00</td>
+<td style="text-align: right;">3982.00</td>
+<td style="text-align: right;">3998.00</td>
+<td style="text-align: right;">4030.00</td>
+<td style="text-align: left;">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Temperature</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">65.97</td>
+<td style="text-align: right;">1.38</td>
+<td style="text-align: right;">63.60</td>
+<td style="text-align: right;">65.20</td>
+<td style="text-align: right;">65.60</td>
+<td style="text-align: right;">66.40</td>
+<td style="text-align: right;">76.20</td>
+<td style="text-align: left;">▇▃▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Usage cont</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">20.99</td>
+<td style="text-align: right;">2.98</td>
+<td style="text-align: right;">12.08</td>
+<td style="text-align: right;">18.36</td>
+<td style="text-align: right;">21.79</td>
+<td style="text-align: right;">23.75</td>
+<td style="text-align: right;">25.90</td>
+<td style="text-align: left;">▁▃▅▃▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Carb Flow</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2468.35</td>
+<td style="text-align: right;">1073.70</td>
+<td style="text-align: right;">26.00</td>
+<td style="text-align: right;">1144.00</td>
+<td style="text-align: right;">3028.00</td>
+<td style="text-align: right;">3186.00</td>
+<td style="text-align: right;">5104.00</td>
+<td style="text-align: left;">▂▅▆▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Density</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.17</td>
+<td style="text-align: right;">0.38</td>
+<td style="text-align: right;">0.24</td>
+<td style="text-align: right;">0.90</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">1.62</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: left;">▁▅▇▂▆</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MFR</td>
+<td style="text-align: right;">212</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: right;">704.05</td>
+<td style="text-align: right;">73.90</td>
+<td style="text-align: right;">31.40</td>
+<td style="text-align: right;">706.30</td>
+<td style="text-align: right;">724.00</td>
+<td style="text-align: right;">731.00</td>
+<td style="text-align: right;">868.60</td>
+<td style="text-align: left;">▁▁▁▂▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Balling</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2.20</td>
+<td style="text-align: right;">0.93</td>
+<td style="text-align: right;">-0.17</td>
+<td style="text-align: right;">1.50</td>
+<td style="text-align: right;">1.65</td>
+<td style="text-align: right;">3.29</td>
+<td style="text-align: right;">4.01</td>
+<td style="text-align: left;">▁▇▇▁▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pressure Vacuum</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">-5.22</td>
+<td style="text-align: right;">0.57</td>
+<td style="text-align: right;">-6.60</td>
+<td style="text-align: right;">-5.60</td>
+<td style="text-align: right;">-5.40</td>
+<td style="text-align: right;">-5.00</td>
+<td style="text-align: right;">-3.60</td>
+<td style="text-align: left;">▂▇▆▂▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PH</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">8.55</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">7.88</td>
+<td style="text-align: right;">8.44</td>
+<td style="text-align: right;">8.54</td>
+<td style="text-align: right;">8.68</td>
+<td style="text-align: right;">9.36</td>
+<td style="text-align: left;">▁▅▇▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Oxygen Filler</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bowl Setpoint</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">109.33</td>
+<td style="text-align: right;">15.30</td>
+<td style="text-align: right;">70.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">120.00</td>
+<td style="text-align: right;">120.00</td>
+<td style="text-align: right;">140.00</td>
+<td style="text-align: left;">▁▂▃▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pressure Setpoint</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">47.62</td>
+<td style="text-align: right;">2.04</td>
+<td style="text-align: right;">44.00</td>
+<td style="text-align: right;">46.00</td>
+<td style="text-align: right;">46.00</td>
+<td style="text-align: right;">50.00</td>
+<td style="text-align: right;">52.00</td>
+<td style="text-align: left;">▁▇▁▆▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Air Pressurer</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">142.83</td>
+<td style="text-align: right;">1.21</td>
+<td style="text-align: right;">140.80</td>
+<td style="text-align: right;">142.20</td>
+<td style="text-align: right;">142.60</td>
+<td style="text-align: right;">143.00</td>
+<td style="text-align: right;">148.20</td>
+<td style="text-align: left;">▅▇▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alch Rel</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">6.90</td>
+<td style="text-align: right;">0.51</td>
+<td style="text-align: right;">5.28</td>
+<td style="text-align: right;">6.54</td>
+<td style="text-align: right;">6.56</td>
+<td style="text-align: right;">7.24</td>
+<td style="text-align: right;">8.62</td>
+<td style="text-align: left;">▁▇▂▃▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Carb Rel</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">5.44</td>
+<td style="text-align: right;">0.13</td>
+<td style="text-align: right;">4.96</td>
+<td style="text-align: right;">5.34</td>
+<td style="text-align: right;">5.40</td>
+<td style="text-align: right;">5.54</td>
+<td style="text-align: right;">6.06</td>
+<td style="text-align: left;">▁▇▇▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Balling Lvl</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2.05</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.38</td>
+<td style="text-align: right;">1.48</td>
+<td style="text-align: right;">3.14</td>
+<td style="text-align: right;">3.66</td>
+<td style="text-align: left;">▁▇▂▁▆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">StudentEvaluation</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">267</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">33</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">logical</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">31</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Brand Code</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: logical</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: left;">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PH</td>
+<td style="text-align: right;">267</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NaN</td>
+<td style="text-align: left;">:</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Carb Volume</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">5.37</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">5.15</td>
+<td style="text-align: right;">5.29</td>
+<td style="text-align: right;">5.34</td>
+<td style="text-align: right;">5.47</td>
+<td style="text-align: right;">5.67</td>
+<td style="text-align: left;">▂▇▃▅▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fill Ounces</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">23.97</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">23.75</td>
+<td style="text-align: right;">23.92</td>
+<td style="text-align: right;">23.97</td>
+<td style="text-align: right;">24.01</td>
+<td style="text-align: right;">24.20</td>
+<td style="text-align: left;">▁▅▇▃▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PC Volume</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0.28</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.23</td>
+<td style="text-align: right;">0.28</td>
+<td style="text-align: right;">0.32</td>
+<td style="text-align: right;">0.46</td>
+<td style="text-align: left;">▁▆▇▅▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Carb Pressure</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">68.25</td>
+<td style="text-align: right;">3.86</td>
+<td style="text-align: right;">60.20</td>
+<td style="text-align: right;">65.30</td>
+<td style="text-align: right;">68.00</td>
+<td style="text-align: right;">70.60</td>
+<td style="text-align: right;">77.60</td>
+<td style="text-align: left;">▃▆▇▃▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Carb Temp</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">141.23</td>
+<td style="text-align: right;">4.30</td>
+<td style="text-align: right;">130.00</td>
+<td style="text-align: right;">138.40</td>
+<td style="text-align: right;">140.80</td>
+<td style="text-align: right;">143.80</td>
+<td style="text-align: right;">154.00</td>
+<td style="text-align: left;">▁▆▇▃▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PSC</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: left;">▆▇▃▂▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PSC Fill</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0.19</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">0.26</td>
+<td style="text-align: right;">0.62</td>
+<td style="text-align: left;">▇▇▃▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PSC CO2</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.24</td>
+<td style="text-align: left;">▇▃▂▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mnf Flow</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">21.03</td>
+<td style="text-align: right;">117.76</td>
+<td style="text-align: right;">-100.20</td>
+<td style="text-align: right;">-100.00</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">141.30</td>
+<td style="text-align: right;">220.40</td>
+<td style="text-align: left;">▇▁▁▆▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Carb Pressure1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">123.04</td>
+<td style="text-align: right;">4.42</td>
+<td style="text-align: right;">113.00</td>
+<td style="text-align: right;">120.20</td>
+<td style="text-align: right;">123.40</td>
+<td style="text-align: right;">125.50</td>
+<td style="text-align: right;">136.00</td>
+<td style="text-align: left;">▃▃▇▂▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fill Pressure</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">48.14</td>
+<td style="text-align: right;">3.44</td>
+<td style="text-align: right;">37.80</td>
+<td style="text-align: right;">46.00</td>
+<td style="text-align: right;">47.80</td>
+<td style="text-align: right;">50.20</td>
+<td style="text-align: right;">60.20</td>
+<td style="text-align: left;">▁▇▇▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hyd Pressure1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">12.01</td>
+<td style="text-align: right;">13.53</td>
+<td style="text-align: right;">-50.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">10.40</td>
+<td style="text-align: right;">20.40</td>
+<td style="text-align: right;">50.00</td>
+<td style="text-align: left;">▁▁▇▆▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hyd Pressure2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">20.11</td>
+<td style="text-align: right;">17.21</td>
+<td style="text-align: right;">-50.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">26.80</td>
+<td style="text-align: right;">34.80</td>
+<td style="text-align: right;">61.40</td>
+<td style="text-align: left;">▁▁▆▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hyd Pressure3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">19.61</td>
+<td style="text-align: right;">16.56</td>
+<td style="text-align: right;">-50.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">27.70</td>
+<td style="text-align: right;">33.00</td>
+<td style="text-align: right;">49.20</td>
+<td style="text-align: left;">▁▁▆▃▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hyd Pressure4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">97.84</td>
+<td style="text-align: right;">13.92</td>
+<td style="text-align: right;">68.00</td>
+<td style="text-align: right;">90.00</td>
+<td style="text-align: right;">98.00</td>
+<td style="text-align: right;">104.00</td>
+<td style="text-align: right;">140.00</td>
+<td style="text-align: left;">▅▆▇▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Filler Level</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">110.29</td>
+<td style="text-align: right;">15.50</td>
+<td style="text-align: right;">69.20</td>
+<td style="text-align: right;">100.60</td>
+<td style="text-align: right;">118.60</td>
+<td style="text-align: right;">120.20</td>
+<td style="text-align: right;">153.20</td>
+<td style="text-align: left;">▂▃▇▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Filler Speed</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">3581.39</td>
+<td style="text-align: right;">911.19</td>
+<td style="text-align: right;">1006.00</td>
+<td style="text-align: right;">3812.00</td>
+<td style="text-align: right;">3978.00</td>
+<td style="text-align: right;">3996.00</td>
+<td style="text-align: right;">4020.00</td>
+<td style="text-align: left;">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Temperature</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">66.23</td>
+<td style="text-align: right;">1.69</td>
+<td style="text-align: right;">63.80</td>
+<td style="text-align: right;">65.40</td>
+<td style="text-align: right;">65.80</td>
+<td style="text-align: right;">66.60</td>
+<td style="text-align: right;">75.40</td>
+<td style="text-align: left;">▇▅▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Usage cont</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">20.90</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">12.90</td>
+<td style="text-align: right;">18.12</td>
+<td style="text-align: right;">21.44</td>
+<td style="text-align: right;">23.74</td>
+<td style="text-align: right;">24.60</td>
+<td style="text-align: left;">▁▃▃▃▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Carb Flow</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2408.64</td>
+<td style="text-align: right;">1161.36</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1083.00</td>
+<td style="text-align: right;">3038.00</td>
+<td style="text-align: right;">3215.00</td>
+<td style="text-align: right;">3858.00</td>
+<td style="text-align: left;">▂▃▁▆▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Density</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.18</td>
+<td style="text-align: right;">0.38</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">1.60</td>
+<td style="text-align: right;">1.84</td>
+<td style="text-align: left;">▁▁▇▁▅</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MFR</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.88</td>
+<td style="text-align: right;">697.80</td>
+<td style="text-align: right;">96.40</td>
+<td style="text-align: right;">15.60</td>
+<td style="text-align: right;">707.00</td>
+<td style="text-align: right;">724.60</td>
+<td style="text-align: right;">731.45</td>
+<td style="text-align: right;">784.80</td>
+<td style="text-align: left;">▁▁▁▁▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Balling</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2.20</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: right;">0.90</td>
+<td style="text-align: right;">1.50</td>
+<td style="text-align: right;">1.65</td>
+<td style="text-align: right;">3.24</td>
+<td style="text-align: right;">3.79</td>
+<td style="text-align: left;">▅▇▁▂▅</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pressure Vacuum</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">-5.17</td>
+<td style="text-align: right;">0.58</td>
+<td style="text-align: right;">-6.40</td>
+<td style="text-align: right;">-5.60</td>
+<td style="text-align: right;">-5.20</td>
+<td style="text-align: right;">-4.80</td>
+<td style="text-align: right;">-3.60</td>
+<td style="text-align: left;">▁▇▆▃▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Oxygen Filler</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bowl Setpoint</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">109.62</td>
+<td style="text-align: right;">15.02</td>
+<td style="text-align: right;">70.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">120.00</td>
+<td style="text-align: right;">120.00</td>
+<td style="text-align: right;">130.00</td>
+<td style="text-align: left;">▁▂▁▃▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pressure Setpoint</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">47.73</td>
+<td style="text-align: right;">2.06</td>
+<td style="text-align: right;">44.00</td>
+<td style="text-align: right;">46.00</td>
+<td style="text-align: right;">46.00</td>
+<td style="text-align: right;">50.00</td>
+<td style="text-align: right;">52.00</td>
+<td style="text-align: left;">▁▇▁▆▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Air Pressurer</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">142.83</td>
+<td style="text-align: right;">1.23</td>
+<td style="text-align: right;">141.20</td>
+<td style="text-align: right;">142.20</td>
+<td style="text-align: right;">142.60</td>
+<td style="text-align: right;">142.80</td>
+<td style="text-align: right;">147.20</td>
+<td style="text-align: left;">▅▇▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Alch Rel</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">6.91</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">6.40</td>
+<td style="text-align: right;">6.54</td>
+<td style="text-align: right;">6.58</td>
+<td style="text-align: right;">7.18</td>
+<td style="text-align: right;">7.82</td>
+<td style="text-align: left;">▇▁▂▁▃</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Carb Rel</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">5.44</td>
+<td style="text-align: right;">0.13</td>
+<td style="text-align: right;">5.18</td>
+<td style="text-align: right;">5.34</td>
+<td style="text-align: right;">5.40</td>
+<td style="text-align: right;">5.56</td>
+<td style="text-align: right;">5.74</td>
+<td style="text-align: left;">▂▇▂▃▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Balling Lvl</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2.05</td>
+<td style="text-align: right;">0.88</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.38</td>
+<td style="text-align: right;">1.48</td>
+<td style="text-align: right;">3.08</td>
+<td style="text-align: right;">3.42</td>
+<td style="text-align: left;">▁▃▇▁▇</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </section>
 <section id="clean-and-tidy-data" class="level2">
 <h2 class="anchored" data-anchor-id="clean-and-tidy-data">Clean and Tidy Data</h2>
+<p>Mutate variable types (e.g., convert character column <code>Brand Code</code> to factor, numeric, etc., so we can use this to forecast data).</p>
+<p>Browse and remove outliers if necessary.</p>
 <p>Impute and transform if necessary.</p>
 <ul>
 <li><p>Andreina to impute</p></li>
-<li><p>Adreina to check correlation, remove features that have correlation over some threshold.</p></li>
+<li><p>Adreina to check correlation, remove features that have correlation over some threshold</p></li>
+<li><p>Remove near zero variance predictors with <code>nearZeroVar()</code>.</p></li>
 </ul>
 </section>
 <section id="exploratory-data-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
+<!--# Ali, since this data is not a time series, we can't do time plots or decomp like we discussed earlier. You can try exploring and plotting the data using `featurePlot(trainingData$x, trainingData$y)`, a correlation plot between all variables with `ggpairs()`, and/or other methods? If relationships between predictors and PH look linear, we'd opt for linear models. If relationships look non-linear, we can try forecasting with non-linear or tree-based models. -Naomi -->
 <ul>
 <li><p>Ali to Plot time plot</p></li>
 <li><p>Ali to plot decomposition plot</p></li>
-<li></li>
 </ul>
 </section>
 <section id="forecast" class="level2">
 <h2 class="anchored" data-anchor-id="forecast">Forecast</h2>
+<p>We will try the following models:</p>
 <ul>
-<li><p>NB to try ARIMA</p></li>
-<li><p>NB to try ETS</p></li>
-<li><p>SNAIVE</p></li>
-<li></li>
+<li><p>Linear regression models:</p>
+<ul>
+<li><p>PLS</p></li>
+<li><p>Elastic Net</p></li>
+</ul></li>
+<li><p>Non-linear regression models:</p>
+<ul>
+<li><p>KNN</p></li>
+<li><p>Multivariate Adaptive Regression Splines (MARS)</p></li>
+</ul></li>
+<li><p>Tree-based regression models:</p>
+<ul>
+<li><p>Single Tree</p></li>
+<li><p>Model Tree</p></li>
+</ul></li>
 </ul>
-<p>Compare fit and pick model to export.</p>
+<p>Since the data is relatively large, we will avoid heavy models like neural networks, support vector machines (SVM), or boosted trees. Since we have a lot of predictors, we opt for models that handle feature selection or dimensionality reduction like elastic net, PLS, and tree-based models. We also want model results to be easy to interpret for our non-technical report, so we focus on elastic net, MARS, and single/model trees.</p>
+<!--# Based on correlation plot in EDA section above, if relationships between predictors and PH look linear, we may opt for linear models. If relationships look non-linear, we can try forecasting with non-linear or tree-based models. -Naomi -->
+<p>Also, because the data is relatively large, we can afford to use a training and a test set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!--NB to DELETE this line after imputation section is completed--&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span> <span class="fu">drop_na</span>()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into a training and a test set</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>trainingRows <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    StudentData<span class="sc">$</span>PH,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> .<span class="dv">80</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">list =</span> <span class="cn">FALSE</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>StudentData_train <span class="ot">&lt;-</span> StudentData[trainingRows, ]</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>StudentData_test <span class="ot">&lt;-</span> StudentData[<span class="sc">-</span>trainingRows, ]</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save training and test predictors and response variables</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>StudentData_train_x <span class="ot">&lt;-</span> StudentData_train[, <span class="sc">!</span><span class="fu">names</span>(StudentData_train) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>StudentData_train_y <span class="ot">&lt;-</span> StudentData_train<span class="sc">$</span>PH</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>StudentData_test_x <span class="ot">&lt;-</span> StudentData_test[, <span class="sc">!</span><span class="fu">names</span>(StudentData_test) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>StudentData_test_y <span class="ot">&lt;-</span> StudentData_test<span class="sc">$</span>PH</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Since these models take a long time to train, we’ll utilize the <code>doParallel</code> package for speed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>cluster <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    cluster</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Fitting models to the training data below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>rpartTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rpart2"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">10</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>rpartTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CART 
+
+1631 samples
+  32 predictor
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 1470, 1468, 1467, 1468, 1468, 1469, ... 
+Resampling results across tuning parameters:
+
+  maxdepth  RMSE       Rsquared   MAE       
+   1        0.1527077  0.2100463  0.11968247
+   2        0.1442171  0.2961588  0.11338588
+   3        0.1398430  0.3374586  0.11038374
+   4        0.1370878  0.3634990  0.10693092
+   5        0.1336422  0.3944249  0.10437377
+   7        0.1312576  0.4166290  0.10242728
+   8        0.1300626  0.4278289  0.10124376
+   9        0.1293679  0.4345415  0.10076945
+  10        0.1284692  0.4420455  0.10021992
+  11        0.1248477  0.4754274  0.09675871
+
+RMSE was used to select the optimal model using the smallest value.
+The final value used for the model was maxdepth = 11.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>rpartPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    rpartTune,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!--NB to DELETE this line after data cleaning section is completed and variable types are changed to numeric--&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>StudentData_train_x <span class="ot">&lt;-</span> StudentData_train_x[, <span class="fu">sapply</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    is.numeric</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>)]</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>m5Tune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"M5"</span>,</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>),</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">Weka_control</span>(<span class="at">M =</span> <span class="dv">10</span>)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>m5Tune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model Tree 
+
+1631 samples
+  31 predictor
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 1466, 1469, 1469, 1468, 1468, 1468, ... 
+Resampling results across tuning parameters:
+
+  pruned  smoothed  rules  RMSE       Rsquared    MAE       
+  Yes     Yes       Yes    1.4536324  0.23159453  0.77824790
+  Yes     Yes       No     3.4087540  0.24495981  2.98271715
+  Yes     No        Yes    0.1270403  0.46970002  0.09373583
+  Yes     No        No     0.1248864  0.49512438  0.08955238
+  No      Yes       Yes    1.7939364  0.03750405  0.90828786
+  No      Yes       No     3.4088633  0.25624938  2.98285413
+  No      No        Yes    0.1396709  0.41550049  0.09815195
+  No      No        No     0.1295352  0.48189030  0.08977241
+
+RMSE was used to select the optimal model using the smallest value.
+The final values used for the model were pruned = Yes, smoothed = No and
+ rules = No.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>m5Pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    m5Tune,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="compare-model-fit-and-select-optimal-model" class="level2">
+<h2 class="anchored" data-anchor-id="compare-model-fit-and-select-optimal-model">Compare model fit and select optimal model</h2>
+<p>Next, we compare fit and pick model to export.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ranking <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">Model =</span> <span class="fu">c</span>(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Single Tree"</span>,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Model Tree"</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> rpartPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> m5Pred, <span class="at">obs =</span> StudentData_test_y)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(RMSE)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>ranking</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Model      RMSE  Rsquared        MAE
+1 Single Tree 0.1240419 0.4595032 0.09480928
+2  Model Tree 0.1269674 0.4545744 0.08770661</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>best <span class="ot">&lt;-</span> ranking[<span class="dv">1</span>, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>The Single Tree model gives the optimal resampling and test set performance, as it has the lowest RMSE, highest R squared, and lowest MAE.</strong></p>
 </section>
 <section id="export" class="level2">
 <h2 class="anchored" data-anchor-id="export">Export</h2>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>[RP]</p>
+<p>[RP?]</p>
 </section>
 
 </main>

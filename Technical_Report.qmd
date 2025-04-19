@@ -14,6 +14,8 @@ library(fpp3)
 library(caret)
 library(skimr)
 library(doParallel)
+library(RWeka)
+library(rpart)
 ```
 
 ## Instructions
@@ -50,7 +52,7 @@ StudentEvaluation |> skim()
 
 ## Clean and Tidy Data
 
-Mutate variable types if necessary.
+Mutate variable types (e.g., convert character column `Brand Code` to factor, numeric, etc., so we can use this to forecast data).
 
 Browse and remove outliers if necessary.
 
@@ -94,14 +96,16 @@ We will try the following models:
 
 Since the data is relatively large, we will avoid heavy models like neural networks, support vector machines (SVM), or boosted trees. Since we have a lot of predictors, we opt for models that handle feature selection or dimensionality reduction like elastic net, PLS, and tree-based models. We also want model results to be easy to interpret for our non-technical report, so we focus on elastic net, MARS, and single/model trees.
 
-<!--# Based on correlation plot in EDA section above, if relationships between predictors and PH look linear, we'd opt for linear models. If relationships look non-linear, we can try forecasting with non-linear or tree-based models. -Naomi -->
+<!--# Based on correlation plot in EDA section above, if relationships between predictors and PH look linear, we may opt for linear models. If relationships look non-linear, we can try forecasting with non-linear or tree-based models. -Naomi -->
 
 Also, because the data is relatively large, we can afford to use a training and a test set.
 
 ```{r}
 #| label: split-data
 
-StudentData <- StudentData |> drop_na() # <!--NB to DELETE this line after imputation section is completed-->
+# <!--NB to DELETE this line after imputation section is completed-->
+StudentData <- StudentData |> drop_na()
+
 # Split the data into a training and a test set
 trainingRows <- createDataPartition(
     StudentData$PH,
@@ -110,6 +114,12 @@ trainingRows <- createDataPartition(
 )
 StudentData_train <- StudentData[trainingRows, ]
 StudentData_test <- StudentData[-trainingRows, ]
+
+# Save training and test predictors and response variables
+StudentData_train_x <- StudentData_train[, !names(StudentData_train) %in% "PH"]
+StudentData_train_y <- StudentData_train$PH
+StudentData_test_x <- StudentData_test[, !names(StudentData_test) %in% "PH"]
+StudentData_test_y <- StudentData_test$PH
 ```
 
 Since these models take a long time to train, we'll utilize the `doParallel` package for speed.
@@ -131,12 +141,76 @@ registerDoParallel(
 Fitting models to the training data below.
 
 ```{r}
-#| label: fit-models
+#| label: single-tree
+#| warning: false
+
+# Train
+rpartTune <- train(
+    StudentData_train_x,
+    StudentData_train_y,
+    method = "rpart2",
+    tuneLength = 10,
+    trControl = trainControl(method = "cv")
+)
+rpartTune
+
+# Predict
+rpartPred <- predict(
+    rpartTune,
+    newdata = StudentData_test_x
+)
+```
+
+```{r}
+#| label: model-tree
+#| warning: false
+
+# <!--NB to DELETE this line after data cleaning section is completed and variable types are changed to numeric-->
+StudentData_train_x <- StudentData_train_x[, sapply(
+    StudentData_train_x,
+    is.numeric
+)]
+
+# Train
+m5Tune <- train(
+    StudentData_train_x,
+    StudentData_train_y,
+    method = "M5",
+    trControl = trainControl(method = "cv"),
+    control = Weka_control(M = 10)
+)
+m5Tune
+
+# Predict
+m5Pred <- predict(
+    m5Tune,
+    newdata = StudentData_test_x
+)
 ```
 
 ## Compare model fit and select optimal model
 
 Next, we compare fit and pick model to export.
+
+```{r}
+#| label: nonlinear-regression-models
+
+ranking <- data.frame(
+    Model = c(
+        "Single Tree",
+        "Model Tree"
+    ),
+    rbind(
+        postResample(pred = rpartPred, obs = StudentData_test_y),
+        postResample(pred = m5Pred, obs = StudentData_test_y)
+    )
+) |>
+    arrange(RMSE)
+ranking
+best <- ranking[1, 1]
+```
+
+**The `r best` model gives the optimal resampling and test set performance, as it has the lowest RMSE, highest R squared, and lowest MAE.**
 
 ## Export
 
@@ -147,4 +221,4 @@ Next, we compare fit and pick model to export.
 
 ## Conclusion
 
-\[RP\]
+\[RP?\]
