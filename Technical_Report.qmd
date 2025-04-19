@@ -10,15 +10,18 @@ date: "`r Sys.Date()`"
 
 library(tidyverse)
 library(readxl)
+library(fpp3)
+library(caret)
+library(skimr)
 ```
 
 ## Instructions
 
-This is role playing. I am your new boss. I am in charge of production at ABC Beverage and you are a team of data scientists reporting to me. My leadership has told me that new regulations are requiring us to understand our manufacturing process, the predictive factors and be able to report to them our predictive model of PH.
+*This is role playing. I am your new boss. I am in charge of production at ABC Beverage and you are a team of data scientists reporting to me. My leadership has told me that new regulations are requiring us to understand our manufacturing process, the predictive factors and be able to report to them our predictive model of PH.*
 
-Please use the historical data set I am providing. Build and report the factors in BOTH a technical and non-technical report. I like to use Word and Excel. Please provide your non-technical report in a business friendly readable document and your predictions in an Excel readable format. The technical report should show clearly the models you tested and how you selected your final approach.
+*Please use the historical data set I am providing. Build and report the factors in BOTH a technical and non-technical report. I like to use Word and Excel. Please provide your non-technical report in a business friendly readable document and your predictions in an Excel readable format. The technical report should show clearly the models you tested and how you selected your final approach.*
 
-Please submit both Rpubs links and .rmd files or other readable formats for technical and non-technical reports. Also submit the excel file showing the prediction of your models for pH.
+*Please submit both Rpubs links and .rmd files or other readable formats for technical and non-technical reports. Also submit the excel file showing the prediction of your models for pH.*
 
 ## Load data
 
@@ -35,33 +38,95 @@ Impute and transform if necessary.
 
 -   Andreina to impute
 
--   Adreina to check correlation, remove features that have correlation over some threshold.
+-   Adreina to check correlation, remove features that have correlation over some threshold, and remove near zero variance predictors with `nearZeroVar()`.
 
 ## Exploratory Data Analysis
+
+<!--# Ali, since this data is not a time series, we can't do time plots or decomp like we discussed earlier. You can try exploring and plotting the data using `featurePlot(trainingData$x, trainingData$y)`, a correlation plot between all variables with `ggpairs()`, and/or other methods? -Naomi -->
 
 -   Ali to Plot time plot
 
 -   Ali to plot decomposition plot
 
--   
-
 ## Forecast
 
--   NB to try ARIMA
+We will try the following models:
 
--   NB to try ETS
+-   Linear
 
--   SNAIVE
+    1.  PLS
 
--   
+    2.  Ordinary Linear Regression
 
-Compare fit and pick model to export.
+    3.  Robust Linear Regression
+
+    4.  Elastic Net
+
+-   Non-linear
+
+    1.  KNN
+
+    2.  Neural network
+
+    3.  Multivariate Adaptive Regression Splines (MARS)
+
+    4.  Support Vector Machine (SVM)
+
+-   Tree-based regression models
+
+    1.  Single Tree
+
+    2.  Model Tree
+
+    3.  Bagged Tree
+
+    4.  Random Forest
+
+    5.  Boosted Tree
+
+    6.  Cubist Tree
+
+Because the series is relatively long, we can afford to use a training and a test set. We select an ARIMA and an ETS model using the ARIMA() and ETS() functions.
+
+```{r}
+#| label: split-data
+
+StudentData <- StudentData |> drop_na() # <!--NB to DELETE this line after imputation section is completed-->
+# Split the data into a training and a test set
+trainingRows <- createDataPartition(
+    StudentData$PH,
+    p = .80,
+    list = FALSE
+)
+StudentData_train <- StudentData[trainingRows, ]
+StudentData_test <- StudentData[-trainingRows, ]
+```
+
+```{r}
+#| label: fit-ARIMA-and-ETS-models
+
+StudentData_fit <- StudentData_train |>
+    model(
+        arima = ARIMA(),
+        ets = ETS()
+    )
+
+# Report on models selected
+atm1_3_fit
+
+# Save model names
+arima_model_1_3 <- atm1_3_fit$arima |> format()
+ets_model <- atm1_3_fit$ets |> format()
+```
+
+## Compare model fit and select optimal model
+
+Next, we compare fit and pick model to export.
 
 ## Export
 
 ```{r}
 #| label: Export to Excel
-
 
 ```
 
