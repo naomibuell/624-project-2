@@ -71,6 +71,19 @@ Impute and transform if necessary.
 -   Ali to Plot time plot
 
 -   Ali to plot decomposition plot
+```{r}
+summary(student_data)
+plot_histogram(student_data)
+
+student_data |>
+  summarise(across(everything(), ~ sum(is.na(.)))) |>
+  pivot_longer(everything()) |>
+  filter(value > 0) |>
+  arrange(desc(value))
+
+
+plot_missing(student_data)
+
 
 ## Forecast
 
