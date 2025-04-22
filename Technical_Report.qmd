@@ -7,7 +7,7 @@ date: "`r Sys.Date()`"
 
 ```{r}
 #| label: load packages
-
+library(DataExplorer)
 library(tidyverse)
 library(readxl)
 library(fpp3)
@@ -80,7 +80,6 @@ student_data |>
   pivot_longer(everything()) |>
   filter(value > 0) |>
   arrange(desc(value))
-
 
 plot_missing(student_data)
 
