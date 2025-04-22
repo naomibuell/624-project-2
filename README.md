@@ -1,3 +1,33 @@
 # Data 624: Project 2
 
-Link to our non-technical report: <https://docs.google.com/document/d/1d8GVdmhSgmLv7RbIlDRXptjA4X7Tk-9nf_KX27u-PG4/edit?usp=sharing>.
+**Team Members**: Ali Ahmed, Andreina Arias, Kaylie Evans, Naomi Buell, and Zaneta Paulusova  
+
+## Overview
+
+This project addresses new regulatory requirements for ABC Beverage Company by analyzing the manufacturing process and identifying predictive factors influencing the **pH level** of products. Our data science team was tasked with building a predictive model for pH and presenting both technical and non-technical findings.
+
+## Reports
+
+- **Non-Technical Report**: [Google Docs Link](https://docs.google.com/document/d/1d8GVdmhSgmLv7RbIlDRXptjA4X7Tk-9nf_KX27u-PG4/edit?usp=sharing)
+- **Technical Report (RPubs)**: [Insert RPubs link here]
+- **Technical Source (.Qmd)**: See this repository
+
+## Project Contents
+
+- `StudentData.xlsx`: Historical training data
+- `StudentEvaluation.xlsx`: Evaluation/test data
+- `Technical_Report.Qmd`: Technical report with all code and modeling steps
+- `PH_forecasts.xlsx`: Final predictions for the pH values of the evaluation dataset (exported results)
+
+## Libraries Used
+
+```r
+library(DataExplorer)
+library(tidyverse)
+library(readxl)
+library(fpp3)
+library(caret)
+library(skimr)
+library(doParallel)
+library(RWeka)
+library(rpart)
