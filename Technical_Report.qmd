@@ -36,6 +36,14 @@ library(corrplot)
 library(openxlsx)
 ```
 
+We will also set the seed for reproducibility.
+
+```{r}
+#| label: set-seed
+
+set.seed(1234)
+```
+
 Since these models take a long time to train, we'll utilize the `doParallel` package for speed.
 
 ```{r}
