@@ -5,6 +5,8 @@ author: "Ali Ahmed, Andreina Arias, Kaylie Evans, Naomi Buell, and Zaneta Paulus
 date: "`r Sys.Date()`"
 ---
 
+
+
 ## Instructions
 
 *This is role playing. I am your new boss. I am in charge of production at ABC Beverage and you are a team of data scientists reporting to me. My leadership has told me that new regulations are requiring us to understand our manufacturing process, the predictive factors and be able to report to them our predictive model of PH.*
@@ -21,6 +23,8 @@ In this technical report, we will analyze the manufacturing process of ABC Bever
 
 We will use the following packages for data analysis, modeling, and visualization.
 
+
+
 ```{r}
 #| label: load packages
 library(DataExplorer)
@@ -36,7 +40,11 @@ library(corrplot)
 library(openxlsx)
 ```
 
+
+
 Since these models take a long time to train, we'll utilize the `doParallel` package for speed.
+
+
 
 ```{r}
 #| label: parallel-processing
@@ -52,9 +60,13 @@ registerDoParallel(
 )
 ```
 
+
+
 ## Load data
 
 First, we load the data.
+
+
 
 ```{r}
 #| label: load-data
@@ -63,9 +75,13 @@ StudentData <- read_excel("StudentData.xlsx") # Training data
 StudentEvaluation <- read_excel("StudentEvaluation.xlsx") # Test data
 ```
 
+
+
 ## Exploratory Data Analysis
 
 We browse the data below.
+
+
 
 ```{r}
 #| label: browse-data
@@ -74,7 +90,11 @@ StudentData |> skim()
 StudentEvaluation |> skim()
 ```
 
+
+
 Below, we will perform exploratory data analysis (EDA) to understand the dataset better. We will summarize the data, visualize distributions, and check for missing values. We will also explore relationships between predictors and the response variable (pH).
+
+
 
 ```{r}
 #| label: eda
@@ -116,6 +136,8 @@ featurePlot(
     plot = "scatter"
 )
 ```
+
+
 
 From the visualizations and summary statistics above, we can observe:
 
@@ -161,6 +183,8 @@ Since the data is relatively large, we will avoid heavy models like neural netwo
 
 Also, because the data is relatively large, we can afford to use a training and a test set. We also center and scale the data to ensure that all predictors are on the same scale, which is important for models like PLS and elastic net.
 
+
+
 ```{r}
 #| label: split-data
 
@@ -183,7 +207,11 @@ StudentData_test_x <- StudentData_test[, !names(StudentData_test) %in% "PH"]
 StudentData_test_y <- StudentData_test$PH
 ```
 
+
+
 Fitting models to the training data below.
+
+
 
 ```{r}
 #| label: pls
@@ -327,9 +355,13 @@ m5Pred <- predict(
 )
 ```
 
+
+
 ## Compare model fit and select optimal model
 
 Next, we compare fit and pick model to export.
+
+
 
 ```{r}
 #| label: nonlinear-regression-models
@@ -357,9 +389,13 @@ ranking
 best <- ranking[1, 1]
 ```
 
+
+
 **The `r best` model gives the optimal resampling and test set performance since it has the lowest RMSE and highest R squared.**
 
 ## Predict pH for test set
+
+
 
 ```{r}
 #| label: predict-ph
@@ -390,7 +426,11 @@ predictions <- data.frame(
 )
 ```
 
+
+
 ## Export
+
+
 
 ```{r}
 #| label: Export to Excel
@@ -398,6 +438,8 @@ predictions <- data.frame(
 # Export predictions to Excel
 write.xlsx(predictions, "PH_forecasts.xlsx")
 ```
+
+
 
 ## Conclusion
 

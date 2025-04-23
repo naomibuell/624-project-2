@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ali Ahmed, Andreina Arias, Kaylie Evans, Naomi Buell, and Zaneta Paulusova">
-<meta name="dcterms.date" content="2025-04-19">
+<meta name="dcterms.date" content="2025-04-23">
 
 <title>DATA 624 Project 2: Technical Report</title>
 <style>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 19, 2025</p>
+      <p class="date">April 23, 2025</p>
     </div>
   </div>
   
@@ -110,8 +110,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<p><em>This is role playing. I am your new boss. I am in charge of production at ABC Beverage and you are a team of data scientists reporting to me. My leadership has told me that new regulations are requiring us to understand our manufacturing process, the predictive factors and be able to report to them our predictive model of PH.</em></p>
+<p><em>Please use the historical data set I am providing. Build and report the factors in BOTH a technical and non-technical report. I like to use Word and Excel. Please provide your non-technical report in a business friendly readable document and your predictions in an Excel readable format. The technical report should show clearly the models you tested and how you selected your final approach.</em></p>
+<p><em>Please submit both Rpubs links and .rmd files or other readable formats for technical and non-technical reports. Also submit the excel file showing the prediction of your models for pH.</em></p>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In this technical report, we will analyze the manufacturing process of ABC Beverage to understand the factors that influence the pH level of the product. We will build predictive models to forecast pH levels based on various predictors in the dataset. The goal is to provide insights into the manufacturing process and to create a model that can be used for future predictions.</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>We will use the following packages for data analysis, modeling, and visualization.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DataExplorer)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
@@ -195,27 +209,42 @@ Loading required package: parallel</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: package 'rpart' was built under R version 4.3.3</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'corrplot' was built under R version 4.3.3</code></pre>
 </div>
-<section id="instructions" class="level2">
-<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
-<p><em>This is role playing. I am your new boss. I am in charge of production at ABC Beverage and you are a team of data scientists reporting to me. My leadership has told me that new regulations are requiring us to understand our manufacturing process, the predictive factors and be able to report to them our predictive model of PH.</em></p>
-<p><em>Please use the historical data set I am providing. Build and report the factors in BOTH a technical and non-technical report. I like to use Word and Excel. Please provide your non-technical report in a business friendly readable document and your predictions in an Excel readable format. The technical report should show clearly the models you tested and how you selected your final approach.</em></p>
-<p><em>Please submit both Rpubs links and .rmd files or other readable formats for technical and non-technical reports. Also submit the excel file showing the prediction of your models for pH.</em></p>
-</section>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In this technical report, we will analyze the manufacturing process of ABC Beverage to understand the factors that influence the pH level of the product. We will build predictive models to forecast pH levels based on various predictors in the dataset. The goal is to provide insights into the manufacturing process and to create a model that can be used for future predictions.</p>
+<div class="cell-output cell-output-stderr">
+<pre><code>corrplot 0.95 loaded</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openxlsx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'openxlsx' was built under R version 4.3.3</code></pre>
+</div>
+</div>
+<p>Since these models take a long time to train, we’ll utilize the <code>doParallel</code> package for speed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>cluster <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    cluster</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="load-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-data">Load data</h2>
 <p>First, we load the data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentData.xlsx"</span>) <span class="co"># Training data</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentEvaluation.xlsx"</span>) <span class="co"># Test data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentData.xlsx"</span>) <span class="co"># Training data</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentEvaluation.xlsx"</span>) <span class="co"># Test data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
 <p>We browse the data below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -745,7 +774,7 @@ Loading required package: parallel</code></pre>
 </tbody>
 </table>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -1288,6 +1317,175 @@ Loading required package: parallel</code></pre>
 </table>
 </div>
 </div>
+<p>Below, we will perform exploratory data analysis (EDA) to understand the dataset better. We will summarize the data, visualize distributions, and check for missing values. We will also explore relationships between predictors and the response variable (pH).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(StudentData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Brand Code         Carb Volume     Fill Ounces      PC Volume      
+ Length:2571        Min.   :5.040   Min.   :23.63   Min.   :0.07933  
+ Class :character   1st Qu.:5.293   1st Qu.:23.92   1st Qu.:0.23917  
+ Mode  :character   Median :5.347   Median :23.97   Median :0.27133  
+                    Mean   :5.370   Mean   :23.97   Mean   :0.27712  
+                    3rd Qu.:5.453   3rd Qu.:24.03   3rd Qu.:0.31200  
+                    Max.   :5.700   Max.   :24.32   Max.   :0.47800  
+                    NA's   :10      NA's   :38      NA's   :39       
+ Carb Pressure     Carb Temp          PSC             PSC Fill     
+ Min.   :57.00   Min.   :128.6   Min.   :0.00200   Min.   :0.0000  
+ 1st Qu.:65.60   1st Qu.:138.4   1st Qu.:0.04800   1st Qu.:0.1000  
+ Median :68.20   Median :140.8   Median :0.07600   Median :0.1800  
+ Mean   :68.19   Mean   :141.1   Mean   :0.08457   Mean   :0.1954  
+ 3rd Qu.:70.60   3rd Qu.:143.8   3rd Qu.:0.11200   3rd Qu.:0.2600  
+ Max.   :79.40   Max.   :154.0   Max.   :0.27000   Max.   :0.6200  
+ NA's   :27      NA's   :26      NA's   :33        NA's   :23      
+    PSC CO2           Mnf Flow       Carb Pressure1  Fill Pressure  
+ Min.   :0.00000   Min.   :-100.20   Min.   :105.6   Min.   :34.60  
+ 1st Qu.:0.02000   1st Qu.:-100.00   1st Qu.:119.0   1st Qu.:46.00  
+ Median :0.04000   Median :  65.20   Median :123.2   Median :46.40  
+ Mean   :0.05641   Mean   :  24.57   Mean   :122.6   Mean   :47.92  
+ 3rd Qu.:0.08000   3rd Qu.: 140.80   3rd Qu.:125.4   3rd Qu.:50.00  
+ Max.   :0.24000   Max.   : 229.40   Max.   :140.2   Max.   :60.40  
+ NA's   :39        NA's   :2         NA's   :32      NA's   :22     
+ Hyd Pressure1   Hyd Pressure2   Hyd Pressure3   Hyd Pressure4   
+ Min.   :-0.80   Min.   : 0.00   Min.   :-1.20   Min.   : 52.00  
+ 1st Qu.: 0.00   1st Qu.: 0.00   1st Qu.: 0.00   1st Qu.: 86.00  
+ Median :11.40   Median :28.60   Median :27.60   Median : 96.00  
+ Mean   :12.44   Mean   :20.96   Mean   :20.46   Mean   : 96.29  
+ 3rd Qu.:20.20   3rd Qu.:34.60   3rd Qu.:33.40   3rd Qu.:102.00  
+ Max.   :58.00   Max.   :59.40   Max.   :50.00   Max.   :142.00  
+ NA's   :11      NA's   :15      NA's   :15      NA's   :30      
+  Filler Level    Filler Speed   Temperature      Usage cont      Carb Flow   
+ Min.   : 55.8   Min.   : 998   Min.   :63.60   Min.   :12.08   Min.   :  26  
+ 1st Qu.: 98.3   1st Qu.:3888   1st Qu.:65.20   1st Qu.:18.36   1st Qu.:1144  
+ Median :118.4   Median :3982   Median :65.60   Median :21.79   Median :3028  
+ Mean   :109.3   Mean   :3687   Mean   :65.97   Mean   :20.99   Mean   :2468  
+ 3rd Qu.:120.0   3rd Qu.:3998   3rd Qu.:66.40   3rd Qu.:23.75   3rd Qu.:3186  
+ Max.   :161.2   Max.   :4030   Max.   :76.20   Max.   :25.90   Max.   :5104  
+ NA's   :20      NA's   :57     NA's   :14      NA's   :5       NA's   :2     
+    Density           MFR           Balling       Pressure Vacuum 
+ Min.   :0.240   Min.   : 31.4   Min.   :-0.170   Min.   :-6.600  
+ 1st Qu.:0.900   1st Qu.:706.3   1st Qu.: 1.496   1st Qu.:-5.600  
+ Median :0.980   Median :724.0   Median : 1.648   Median :-5.400  
+ Mean   :1.174   Mean   :704.0   Mean   : 2.198   Mean   :-5.216  
+ 3rd Qu.:1.620   3rd Qu.:731.0   3rd Qu.: 3.292   3rd Qu.:-5.000  
+ Max.   :1.920   Max.   :868.6   Max.   : 4.012   Max.   :-3.600  
+ NA's   :1       NA's   :212     NA's   :1                        
+       PH        Oxygen Filler     Bowl Setpoint   Pressure Setpoint
+ Min.   :7.880   Min.   :0.00240   Min.   : 70.0   Min.   :44.00    
+ 1st Qu.:8.440   1st Qu.:0.02200   1st Qu.:100.0   1st Qu.:46.00    
+ Median :8.540   Median :0.03340   Median :120.0   Median :46.00    
+ Mean   :8.546   Mean   :0.04684   Mean   :109.3   Mean   :47.62    
+ 3rd Qu.:8.680   3rd Qu.:0.06000   3rd Qu.:120.0   3rd Qu.:50.00    
+ Max.   :9.360   Max.   :0.40000   Max.   :140.0   Max.   :52.00    
+ NA's   :4       NA's   :12        NA's   :2       NA's   :12       
+ Air Pressurer      Alch Rel        Carb Rel      Balling Lvl  
+ Min.   :140.8   Min.   :5.280   Min.   :4.960   Min.   :0.00  
+ 1st Qu.:142.2   1st Qu.:6.540   1st Qu.:5.340   1st Qu.:1.38  
+ Median :142.6   Median :6.560   Median :5.400   Median :1.48  
+ Mean   :142.8   Mean   :6.897   Mean   :5.437   Mean   :2.05  
+ 3rd Qu.:143.0   3rd Qu.:7.240   3rd Qu.:5.540   3rd Qu.:3.14  
+ Max.   :148.2   Max.   :8.620   Max.   :6.060   Max.   :3.66  
+                 NA's   :9       NA's   :10      NA's   :1     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_histogram</span>(StudentData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Technical_Report_files/figure-html/eda-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Technical_Report_files/figure-html/eda-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize missing data</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>StudentData <span class="sc">|&gt;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)))) <span class="sc">|&gt;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(value <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(value))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 31 × 2
+   name           value
+   &lt;chr&gt;          &lt;int&gt;
+ 1 MFR              212
+ 2 Brand Code       120
+ 3 Filler Speed      57
+ 4 PC Volume         39
+ 5 PSC CO2           39
+ 6 Fill Ounces       38
+ 7 PSC               33
+ 8 Carb Pressure1    32
+ 9 Hyd Pressure4     30
+10 Carb Pressure     27
+# ℹ 21 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot missing data</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing</span>(StudentData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Technical_Report_files/figure-html/eda-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation matrix</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>correlation_matrix <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    correlation_matrix,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="st">"hclust"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># addCoef.col = "grey",</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># addCoefasPercent = TRUE,</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">tl.cex =</span> <span class="fl">0.7</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Technical_Report_files/figure-html/eda-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Feature plot</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">featurePlot</span>(</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> StudentData <span class="sc">|&gt;</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(<span class="sc">-</span>PH),</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> StudentData<span class="sc">$</span>PH,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> <span class="st">"scatter"</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Technical_Report_files/figure-html/eda-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the visualizations and summary statistics above, we can observe:</p>
+<ol type="1">
+<li>Distribution patterns:
+<ul>
+<li>Some variables show some skewness, e.g., <code>Filler.Speed</code>, <code>MFR</code>, <code>Oxygen.Filler</code>, and <code>Usage.cont</code></li>
+<li>Many variables are bimodal, e.g., <code>Air.Pressurer</code>, <code>Balling</code>, <code>Balling.Lvl</code>, <code>Carb.Flow</code>, <code>Carb.Rel</code>, and <code>Density</code></li>
+<li>The target variable <code>PH</code> has a relatively normal distribution</li>
+</ul></li>
+<li>Correlations:
+<ul>
+<li>Several predictors show moderate correlations with <code>PH</code>, e.g., <code>Mnf Flow</code>, <code>Usage cont</code>, <code>Filler Level</code>, <code>Bowl Setpoint</code>, and <code>Pressure Setpoint</code></li>
+<li>There are some strong correlations between predictors, suggesting potential multicollinearity. We should address multicollinearity in the data cleaning phase</li>
+</ul></li>
+<li>Missing values:
+<ul>
+<li>Several variables contain missing values that will need to be addressed, especially <code>MFR</code></li>
+</ul></li>
+</ol>
 </section>
 <section id="clean-and-tidy-data" class="level2">
 <h2 class="anchored" data-anchor-id="clean-and-tidy-data">Clean and Tidy Data</h2>
@@ -1300,125 +1498,412 @@ Loading required package: parallel</code></pre>
 <li><p>Remove near zero variance predictors with <code>nearZeroVar()</code>.</p></li>
 </ul>
 </section>
-<section id="exploratory-data-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
-<!--# Ali, since this data is not a time series, we can't do time plots or decomp like we discussed earlier. You can try exploring and plotting the data using `featurePlot(trainingData$x, trainingData$y)`, a correlation plot between all variables with `ggpairs()`, and/or other methods? If relationships between predictors and PH look linear, we'd opt for linear models. If relationships look non-linear, we can try forecasting with non-linear or tree-based models. -Naomi -->
-<ul>
-<li><p>Ali to Plot time plot</p></li>
-<li><p>Ali to plot decomposition plot</p></li>
-</ul>
-</section>
 <section id="forecast" class="level2">
 <h2 class="anchored" data-anchor-id="forecast">Forecast</h2>
 <p>We will try the following models:</p>
 <ul>
-<li><p>Linear regression models:</p>
+<li>Linear regression models:
 <ul>
-<li><p>PLS</p></li>
-<li><p>Elastic Net</p></li>
+<li>PLS</li>
+<li>Elastic Net</li>
 </ul></li>
-<li><p>Non-linear regression models:</p>
+<li>Non-linear regression models:
 <ul>
-<li><p>KNN</p></li>
-<li><p>Multivariate Adaptive Regression Splines (MARS)</p></li>
+<li>KNN</li>
+<li>Multivariate Adaptive Regression Splines (MARS)</li>
 </ul></li>
-<li><p>Tree-based regression models:</p>
+<li>Tree-based regression models:
 <ul>
-<li><p>Single Tree</p></li>
-<li><p>Model Tree</p></li>
+<li>Single Tree</li>
+<li>Model Tree</li>
 </ul></li>
 </ul>
 <p>Since the data is relatively large, we will avoid heavy models like neural networks, support vector machines (SVM), or boosted trees. Since we have a lot of predictors, we opt for models that handle feature selection or dimensionality reduction like elastic net, PLS, and tree-based models. We also want model results to be easy to interpret for our non-technical report, so we focus on elastic net, MARS, and single/model trees.</p>
-<!--# Based on correlation plot in EDA section above, if relationships between predictors and PH look linear, we may opt for linear models. If relationships look non-linear, we can try forecasting with non-linear or tree-based models. -Naomi -->
-<p>Also, because the data is relatively large, we can afford to use a training and a test set.</p>
+<p>Also, because the data is relatively large, we can afford to use a training and a test set. We also center and scale the data to ensure that all predictors are on the same scale, which is important for models like PLS and elastic net.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!--NB to DELETE this line after imputation section is completed--&gt;</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span> <span class="fu">drop_na</span>()</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into a training and a test set</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>trainingRows <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    StudentData<span class="sc">$</span>PH,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> .<span class="dv">80</span>,</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">list =</span> <span class="cn">FALSE</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>StudentData_train <span class="ot">&lt;-</span> StudentData[trainingRows, ]</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>StudentData_test <span class="ot">&lt;-</span> StudentData[<span class="sc">-</span>trainingRows, ]</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save training and test predictors and response variables</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>StudentData_train_x <span class="ot">&lt;-</span> StudentData_train[, <span class="sc">!</span><span class="fu">names</span>(StudentData_train) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>StudentData_train_y <span class="ot">&lt;-</span> StudentData_train<span class="sc">$</span>PH</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>StudentData_test_x <span class="ot">&lt;-</span> StudentData_test[, <span class="sc">!</span><span class="fu">names</span>(StudentData_test) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>StudentData_test_y <span class="ot">&lt;-</span> StudentData_test<span class="sc">$</span>PH</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Since these models take a long time to train, we’ll utilize the <code>doParallel</code> package for speed.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>cluster <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    cluster</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!--NB to DELETE this line after imputation section is completed--&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span> <span class="fu">drop_na</span>()</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into a training and a test set</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>trainingRows <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    StudentData<span class="sc">$</span>PH,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> .<span class="dv">80</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">list =</span> <span class="cn">FALSE</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>StudentData_train <span class="ot">&lt;-</span> StudentData[trainingRows, ]</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>StudentData_test <span class="ot">&lt;-</span> StudentData[<span class="sc">-</span>trainingRows, ]</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save training and test predictors and response variables</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>StudentData_train_x <span class="ot">&lt;-</span> StudentData_train[, <span class="sc">!</span><span class="fu">names</span>(StudentData_train) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>StudentData_train_y <span class="ot">&lt;-</span> StudentData_train<span class="sc">$</span>PH</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>StudentData_test_x <span class="ot">&lt;-</span> StudentData_test[, <span class="sc">!</span><span class="fu">names</span>(StudentData_test) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>StudentData_test_y <span class="ot">&lt;-</span> StudentData_test<span class="sc">$</span>PH</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Fitting models to the training data below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>rpartTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rpart2"</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">10</span>,</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>)</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>rpartTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pre-process the data and tune a PLS model</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>ctrl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>plsTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"pls"</span>,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">20</span>,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> ctrl,</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">preProc =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>)</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Setting row names on a tibble is deprecated.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>plsTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CART 
+<pre><code>Partial Least Squares 
 
 1631 samples
   32 predictor
 
-No pre-processing
+Pre-processing: centered (31), scaled (31), ignore (1) 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 1470, 1468, 1467, 1468, 1468, 1469, ... 
+Summary of sample sizes: 1469, 1468, 1468, 1467, 1467, 1469, ... 
 Resampling results across tuning parameters:
 
-  maxdepth  RMSE       Rsquared   MAE       
-   1        0.1527077  0.2100463  0.11968247
-   2        0.1442171  0.2961588  0.11338588
-   3        0.1398430  0.3374586  0.11038374
-   4        0.1370878  0.3634990  0.10693092
-   5        0.1336422  0.3944249  0.10437377
-   7        0.1312576  0.4166290  0.10242728
-   8        0.1300626  0.4278289  0.10124376
-   9        0.1293679  0.4345415  0.10076945
-  10        0.1284692  0.4420455  0.10021992
-  11        0.1248477  0.4754274  0.09675871
+  ncomp  RMSE       Rsquared   MAE      
+   1     0.1481563  0.2322690  0.1171414
+   2     0.1402377  0.3131235  0.1094942
+   3     0.1377196  0.3377529  0.1087192
+   4     0.1348945  0.3652450  0.1048061
+   5     0.1322253  0.3898022  0.1033249
+   6     0.1311715  0.4002783  0.1023521
+   7     0.1304428  0.4071650  0.1016792
+   8     0.1303050  0.4086675  0.1015841
+   9     0.1301832  0.4099381  0.1012754
+  10     0.1300737  0.4107944  0.1010642
+  11     0.1300127  0.4114942  0.1008875
+  12     0.1298920  0.4126874  0.1008010
+  13     0.1299868  0.4118222  0.1008957
+  14     0.1299353  0.4123915  0.1006733
+  15     0.1298941  0.4127608  0.1006583
+  16     0.1299142  0.4128429  0.1006333
+  17     0.1299091  0.4128967  0.1005335
+  18     0.1299215  0.4129185  0.1007725
+  19     0.1298248  0.4138095  0.1007239
+  20     0.1296873  0.4149971  0.1004675
 
 RMSE was used to select the optimal model using the smallest value.
-The final value used for the model was maxdepth = 11.</code></pre>
+The final value used for the model was ncomp = 20.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>rpartPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    rpartTune,</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>plsPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    plsTune,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!--NB to DELETE this line after data cleaning section is completed and variable types are changed to numeric--&gt;</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>StudentData_train_x <span class="ot">&lt;-</span> StudentData_train_x[, <span class="fu">sapply</span>(</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    is.numeric</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>)]</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>m5Tune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"M5"</span>,</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>),</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">Weka_control</span>(<span class="at">M =</span> <span class="dv">10</span>)</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>m5Tune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!--NB to DELETE this line after data cleaning section is completed and variable types are changed to numeric--&gt;</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>StudentData_train_x <span class="ot">&lt;-</span> StudentData_train_x[, <span class="fu">sapply</span>(</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    is.numeric</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>)]</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>enetGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">.lambda =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.01</span>, .<span class="dv">1</span>),</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fraction =</span> <span class="fu">seq</span>(.<span class="dv">05</span>, <span class="dv">1</span>, <span class="at">length =</span> <span class="dv">20</span>)</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>enetTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"enet"</span>,</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> enetGrid,</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> ctrl,</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">preProc =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>)</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>enetTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Elasticnet 
+
+1631 samples
+  31 predictor
+
+Pre-processing: centered (31), scaled (31) 
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 1469, 1469, 1469, 1466, 1468, 1467, ... 
+Resampling results across tuning parameters:
+
+  lambda  fraction  RMSE       Rsquared   MAE      
+  0.00    0.05      0.1542533  0.2186828  0.1229042
+  0.00    0.10      0.1467546  0.2774438  0.1161283
+  0.00    0.15      0.1426682  0.2994442  0.1123878
+  0.00    0.20      0.1407185  0.3148658  0.1105396
+  0.00    0.25      0.1391604  0.3287483  0.1089554
+  0.00    0.30      0.1379316  0.3399755  0.1076397
+  0.00    0.35      0.1370676  0.3472906  0.1066150
+  0.00    0.40      0.1365623  0.3513378  0.1058524
+  0.00    0.45      0.1363596  0.3529243  0.1054657
+  0.00    0.50      0.1362077  0.3542688  0.1051774
+  0.00    0.55      0.1361685  0.3547078  0.1049935
+  0.00    0.60      0.1361429  0.3549003  0.1048651
+  0.00    0.65      0.1361148  0.3551576  0.1047521
+  0.00    0.70      0.1360655  0.3556207  0.1046370
+  0.00    0.75      0.1360409  0.3558730  0.1045534
+  0.00    0.80      0.1360461  0.3558654  0.1044892
+  0.00    0.85      0.1360686  0.3557034  0.1044371
+  0.00    0.90      0.1361044  0.3554256  0.1044110
+  0.00    0.95      0.1361436  0.3551185  0.1043870
+  0.00    1.00      0.1362035  0.3546319  0.1043776
+  0.01    0.05      0.1584275  0.2139105  0.1268801
+  0.01    0.10      0.1519244  0.2403563  0.1208225
+  0.01    0.15      0.1473227  0.2742828  0.1166859
+  0.01    0.20      0.1441307  0.2923464  0.1137197
+  0.01    0.25      0.1422759  0.3016871  0.1120037
+  0.01    0.30      0.1411147  0.3106928  0.1109347
+  0.01    0.35      0.1399837  0.3211032  0.1098164
+  0.01    0.40      0.1391015  0.3289508  0.1089031
+  0.01    0.45      0.1383113  0.3362379  0.1080640
+  0.01    0.50      0.1376431  0.3421873  0.1073087
+  0.01    0.55      0.1371415  0.3464095  0.1066921
+  0.01    0.60      0.1367768  0.3493874  0.1061869
+  0.01    0.65      0.1365721  0.3510616  0.1058418
+  0.01    0.70      0.1364261  0.3522658  0.1056131
+  0.01    0.75      0.1363100  0.3532632  0.1054239
+  0.01    0.80      0.1362362  0.3539669  0.1052625
+  0.01    0.85      0.1362339  0.3540205  0.1051517
+  0.01    0.90      0.1362438  0.3539290  0.1050747
+  0.01    0.95      0.1362647  0.3538029  0.1050178
+  0.01    1.00      0.1362853  0.3536768  0.1049587
+  0.10    0.05      0.1609987  0.2139105  0.1292203
+  0.10    0.10      0.1551328  0.2196203  0.1238051
+  0.10    0.15      0.1511388  0.2483589  0.1201348
+  0.10    0.20      0.1478087  0.2713893  0.1171741
+  0.10    0.25      0.1452846  0.2845671  0.1148290
+  0.10    0.30      0.1434867  0.2937463  0.1131842
+  0.10    0.35      0.1422730  0.2996498  0.1119500
+  0.10    0.40      0.1414601  0.3052154  0.1112124
+  0.10    0.45      0.1408405  0.3101606  0.1106925
+  0.10    0.50      0.1401284  0.3168308  0.1100260
+  0.10    0.55      0.1395387  0.3224002  0.1094262
+  0.10    0.60      0.1389707  0.3277997  0.1088419
+  0.10    0.65      0.1384861  0.3323497  0.1083077
+  0.10    0.70      0.1381009  0.3359164  0.1078627
+  0.10    0.75      0.1377955  0.3387739  0.1074957
+  0.10    0.80      0.1375467  0.3411315  0.1071786
+  0.10    0.85      0.1373383  0.3431269  0.1069489
+  0.10    0.90      0.1372072  0.3444333  0.1068132
+  0.10    0.95      0.1371322  0.3452478  0.1067264
+  0.10    1.00      0.1370987  0.3457360  0.1066613
+
+RMSE was used to select the optimal model using the smallest value.
+The final values used for the model were fraction = 0.75 and lambda = 0.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>enetPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    enetTune,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>knnTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"knn"</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">preProc =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>),</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">10</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>knnTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>k-Nearest Neighbors 
+
+1631 samples
+  31 predictor
+
+Pre-processing: centered (31), scaled (31) 
+Resampling: Bootstrapped (25 reps) 
+Summary of sample sizes: 1631, 1631, 1631, 1631, 1631, 1631, ... 
+Resampling results across tuning parameters:
+
+  k   RMSE       Rsquared   MAE       
+   5  0.1317214  0.4211584  0.09625817
+   7  0.1293215  0.4327747  0.09544171
+   9  0.1276781  0.4423046  0.09482180
+  11  0.1273897  0.4432974  0.09529172
+  13  0.1272094  0.4441334  0.09557480
+  15  0.1275775  0.4407361  0.09598076
+  17  0.1277041  0.4397777  0.09634425
+  19  0.1278887  0.4378676  0.09666390
+  21  0.1282501  0.4346142  0.09720243
+  23  0.1284230  0.4331808  0.09736022
+
+RMSE was used to select the optimal model using the smallest value.
+The final value used for the model was k = 13.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>knnPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    knnTune,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>marsGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">.degree =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">.nprune =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">38</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>marsTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"earth"</span>,</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> marsGrid,</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>)</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>marsTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Multivariate Adaptive Regression Spline 
+
+1631 samples
+  31 predictor
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 1467, 1469, 1468, 1468, 1467, 1467, ... 
+Resampling results across tuning parameters:
+
+  degree  nprune  RMSE       Rsquared   MAE       
+  1        2      0.1498500  0.2167311  0.11726571
+  1        3      0.1446589  0.2692505  0.11234681
+  1        4      0.1433252  0.2829916  0.11126829
+  1        5      0.1417797  0.2986511  0.10980266
+  1        6      0.1408249  0.3088324  0.10855440
+  1        7      0.1391599  0.3255162  0.10721968
+  1        8      0.1377726  0.3382494  0.10681204
+  1        9      0.1359731  0.3551097  0.10461512
+  1       10      0.1345769  0.3675733  0.10395380
+  1       11      0.1328452  0.3830259  0.10288823
+  1       12      0.1320749  0.3899231  0.10154958
+  1       13      0.1317028  0.3939731  0.10132987
+  1       14      0.1310375  0.3999049  0.10083311
+  1       15      0.1308564  0.4014927  0.10071427
+  1       16      0.1310595  0.3999514  0.10074756
+  1       17      0.1309847  0.4006875  0.10076210
+  1       18      0.1309539  0.4009830  0.10057773
+  1       19      0.1308819  0.4016477  0.10054498
+  1       20      0.1310267  0.4005008  0.10059082
+  1       21      0.1312785  0.3982845  0.10081959
+  1       22      0.1313937  0.3972208  0.10088348
+  1       23      0.1314056  0.3971762  0.10088875
+  1       24      0.1314919  0.3965187  0.10085975
+  1       25      0.1314367  0.3971140  0.10078392
+  1       26      0.1315831  0.3956856  0.10082121
+  1       27      0.1314874  0.3963913  0.10074342
+  1       28      0.1314980  0.3963940  0.10080716
+  1       29      0.1313882  0.3973136  0.10076725
+  1       30      0.1314038  0.3972582  0.10081556
+  1       31      0.1314457  0.3969641  0.10089536
+  1       32      0.1314381  0.3970358  0.10089936
+  1       33      0.1314239  0.3971716  0.10085190
+  1       34      0.1314839  0.3967059  0.10089382
+  1       35      0.1313949  0.3974405  0.10085102
+  1       36      0.1313478  0.3978797  0.10078864
+  1       37      0.1313495  0.3978336  0.10071112
+  1       38      0.1313495  0.3978336  0.10071112
+  2        2      0.1500452  0.2138847  0.11746529
+  2        3      0.1450872  0.2664924  0.11262425
+  2        4      0.1444190  0.2737757  0.11259052
+  2        5      0.1415935  0.3017705  0.11009739
+  2        6      0.1402549  0.3146098  0.10885779
+  2        7      0.1383084  0.3332419  0.10733307
+  2        8      0.1380858  0.3362324  0.10661041
+  2        9      0.1368305  0.3489957  0.10589909
+  2       10      0.1354575  0.3624781  0.10391358
+  2       11      0.1342927  0.3743403  0.10282404
+  2       12      0.1338545  0.3798154  0.10246800
+  2       13      0.1328663  0.3884178  0.10163757
+  2       14      0.1324017  0.3926810  0.10125070
+  2       15      0.1312321  0.4028230  0.09991295
+  2       16      0.1302113  0.4117087  0.09928295
+  2       17      0.1288887  0.4229035  0.09821621
+  2       18      0.1287708  0.4242895  0.09781900
+  2       19      0.1284258  0.4272811  0.09761602
+  2       20      0.1281917  0.4295196  0.09710153
+  2       21      0.1278517  0.4325389  0.09680279
+  2       22      0.1275043  0.4354695  0.09648729
+  2       23      0.1270125  0.4396312  0.09614683
+  2       24      0.1266252  0.4429315  0.09593149
+  2       25      0.1266641  0.4428767  0.09603888
+  2       26      0.1264026  0.4450229  0.09582932
+  2       27      0.1263699  0.4456329  0.09577325
+  2       28      0.1263278  0.4459687  0.09577902
+  2       29      0.1263809  0.4455845  0.09573744
+  2       30      0.1263685  0.4456918  0.09567421
+  2       31      0.1262786  0.4463393  0.09558406
+  2       32      0.1262786  0.4463393  0.09558406
+  2       33      0.1262786  0.4463393  0.09558406
+  2       34      0.1262786  0.4463393  0.09558406
+  2       35      0.1262786  0.4463393  0.09558406
+  2       36      0.1262786  0.4463393  0.09558406
+  2       37      0.1262786  0.4463393  0.09558406
+  2       38      0.1262786  0.4463393  0.09558406
+
+RMSE was used to select the optimal model using the smallest value.
+The final values used for the model were nprune = 31 and degree = 2.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>marsPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    marsTune,</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>rpartTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rpart2"</span>,</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">10</span>,</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>)</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>rpartTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CART 
+
+1631 samples
+  31 predictor
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 1467, 1467, 1470, 1468, 1468, 1469, ... 
+Resampling results across tuning parameters:
+
+  maxdepth  RMSE       Rsquared   MAE      
+   1        0.1512246  0.2036327  0.1188892
+   2        0.1480183  0.2380269  0.1162154
+   3        0.1429947  0.2887288  0.1124495
+   4        0.1401228  0.3166776  0.1097182
+   5        0.1373273  0.3431803  0.1071311
+   8        0.1356737  0.3590931  0.1060292
+  10        0.1334072  0.3799740  0.1045702
+  11        0.1337500  0.3772558  0.1048545
+  13        0.1324885  0.3896010  0.1040536
+  15        0.1314901  0.3985958  0.1027273
+
+RMSE was used to select the optimal model using the smallest value.
+The final value used for the model was maxdepth = 15.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>rpartPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    rpartTune,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>m5Tune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"M5"</span>,</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>),</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">Weka_control</span>(<span class="at">M =</span> <span class="dv">10</span>)</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>m5Tune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Model Tree 
 
@@ -1427,57 +1912,102 @@ The final value used for the model was maxdepth = 11.</code></pre>
 
 No pre-processing
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 1466, 1469, 1469, 1468, 1468, 1468, ... 
+Summary of sample sizes: 1466, 1468, 1467, 1469, 1467, 1469, ... 
 Resampling results across tuning parameters:
 
   pruned  smoothed  rules  RMSE       Rsquared    MAE       
-  Yes     Yes       Yes    1.4536324  0.23159453  0.77824790
-  Yes     Yes       No     3.4087540  0.24495981  2.98271715
-  Yes     No        Yes    0.1270403  0.46970002  0.09373583
-  Yes     No        No     0.1248864  0.49512438  0.08955238
-  No      Yes       Yes    1.7939364  0.03750405  0.90828786
-  No      Yes       No     3.4088633  0.25624938  2.98285413
-  No      No        Yes    0.1396709  0.41550049  0.09815195
-  No      No        No     0.1295352  0.48189030  0.08977241
+  Yes     Yes       Yes    1.6845367  0.15467925  1.02178157
+  Yes     Yes       No     4.9165146  0.18723225  4.29870799
+  Yes     No        Yes    0.1273707  0.44995042  0.09457888
+  Yes     No        No     0.1244660  0.49022221  0.08915590
+  No      Yes       Yes    1.4845361  0.05723617  0.71135075
+  No      Yes       No     4.9205424  0.19303872  4.30054081
+  No      No        Yes    0.1450745  0.35086842  0.10397430
+  No      No        No     0.1341505  0.44672850  0.09155969
 
 RMSE was used to select the optimal model using the smallest value.
 The final values used for the model were pruned = Yes, smoothed = No and
  rules = No.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>m5Pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    m5Tune,</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>m5Pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>    m5Tune,</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="compare-model-fit-and-select-optimal-model" class="level2">
 <h2 class="anchored" data-anchor-id="compare-model-fit-and-select-optimal-model">Compare model fit and select optimal model</h2>
 <p>Next, we compare fit and pick model to export.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ranking <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">Model =</span> <span class="fu">c</span>(</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Single Tree"</span>,</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Model Tree"</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> rpartPred, <span class="at">obs =</span> StudentData_test_y),</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> m5Pred, <span class="at">obs =</span> StudentData_test_y)</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(RMSE)</span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>ranking</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>ranking <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">Model =</span> <span class="fu">c</span>(</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"PLS"</span>,</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Elastic Net"</span>,</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"KNN"</span>,</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"MARS"</span>,</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Single Tree"</span>,</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Model Tree"</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(</span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> plsPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> enetPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> knnPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> marsPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> rpartPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> m5Pred, <span class="at">obs =</span> StudentData_test_y)</span>
+<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(RMSE)</span>
+<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a>ranking</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        Model      RMSE  Rsquared        MAE
-1 Single Tree 0.1240419 0.4595032 0.09480928
-2  Model Tree 0.1269674 0.4545744 0.08770661</code></pre>
+<pre><code>        Model      RMSE   Rsquared        MAE
+1         KNN 0.1268247 0.52290124 0.09292464
+2         PLS 0.1287034 0.47800895 0.09887390
+3 Single Tree 0.1292098 0.47350263 0.09779371
+4 Elastic Net 0.1367377 0.41097613 0.10170646
+5        MARS 0.1374335 0.41403564 0.09920252
+6  Model Tree 0.3473885 0.04444161 0.11168467</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>best <span class="ot">&lt;-</span> ranking[<span class="dv">1</span>, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>best <span class="ot">&lt;-</span> ranking[<span class="dv">1</span>, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>The Single Tree model gives the optimal resampling and test set performance, as it has the lowest RMSE, highest R squared, and lowest MAE.</strong></p>
+<p><strong>The KNN model gives the optimal resampling and test set performance, as it has the lowest RMSE, highest R squared.</strong></p>
+</section>
+<section id="predict-ph-for-test-set" class="level2">
+<h2 class="anchored" data-anchor-id="predict-ph-for-test-set">Predict pH for test set</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict pH for the test set using the best model</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"PLS"</span>) {</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> plsTune</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"Elastic Net"</span>) {</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> enetTune</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"KNN"</span>) {</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> knnTune</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"MARS"</span>) {</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> marsTune</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"Single Tree"</span>) {</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> rpartTune</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"Model Tree"</span>) {</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> m5Tune</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>StudentEvaluation_x <span class="ot">&lt;-</span> StudentEvaluation <span class="sc">|&gt;</span></span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>PH) <span class="sc">|&gt;</span></span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">drop_na</span>() <span class="co"># &lt;!--NB to DELETE this line after imputation section is completed--&gt;</span></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine predictions with the test set</span></span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>    StudentEvaluation_x,</span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">PH =</span> <span class="fu">predict</span>(finalTune, <span class="at">newdata =</span> StudentEvaluation_x)</span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="export" class="level2">
 <h2 class="anchored" data-anchor-id="export">Export</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export predictions to Excel</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(predictions, <span class="st">"PH_forecasts.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
