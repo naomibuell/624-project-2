@@ -9,7 +9,6 @@ This project addresses new regulatory requirements for ABC Beverage Company by a
 ## Reports
 
 - **Non-Technical Report**: [Google Docs Link](https://docs.google.com/document/d/1d8GVdmhSgmLv7RbIlDRXptjA4X7Tk-9nf_KX27u-PG4/edit?usp=sharing)
-- **Technical Report (RPubs)**: [Insert RPubs link here]
 - **Technical Source (.Qmd)**: See this repository
 
 ## Project Contents
