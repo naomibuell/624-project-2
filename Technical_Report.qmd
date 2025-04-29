@@ -518,4 +518,4 @@ write.xlsx(predictions, "PH_forecasts.xlsx")
 
 ## Conclusion
 
-\[RP?\]
+**The forecasts for PH are saved as "PH_forecasts.xlsx", using the `r best` model.**
