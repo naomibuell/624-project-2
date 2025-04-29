@@ -34,6 +34,10 @@ library(RWeka)
 library(rpart)
 library(corrplot)
 library(openxlsx)
+library(tidyr)
+library(mice)
+library(janitor)
+library(dplyr)
 ```
 
 We will also set the seed for reproducibility.
@@ -70,6 +74,89 @@ First, we load the data.
 StudentData <- read_excel("StudentData.xlsx") # Training data
 StudentEvaluation <- read_excel("StudentEvaluation.xlsx") # Test data
 ```
+
+## Tidy Data and Tranformation
+
+```{r}
+#| echo: false
+str(StudentData) #Column names are with spaces will clean up to make it easier to work with in R.
+```
+
+```{r}
+#| echo: false
+StudentData<-clean_names(StudentData)
+summary(StudentData) 
+```
+
+```{r}
+#| echo: false
+#It is best to impute data when missing data is it less than 5%, brand code rounds up to 5% which is why the missing data for brand code will be removed rather.
+Missing<-(colSums(is.na(StudentData))/2571)*100
+print(Missing)
+
+```
+
+
+```{r}
+#| include: false
+#The missing data for brand code were removed as imputation wouldn't appripiate and leaving it missing would cause misleading results in our analysis. For the missing data the MICE function was used to impute missing data that are numerical.
+StudentData<-StudentData|>
+  drop_na(brand_code)
+```
+
+```{r}
+#| include: false
+StudentData<-mice(StudentData, method = "pmm",#pmm=predictive mean matching
+                m=5, #number of imputed dataset usually 5 is default, keep in mind it will take some time.
+                maxit=50,#number of max iteration
+                seed=10)|>
+  complete()
+
+```
+
+
+```{r}
+Removed near zero variance variables
+#| include: false
+StudentData<-StudentData[, -nearZeroVar(StudentData)]
+```
+
+```{r}
+#| echo: false
+#Check for missing data again
+Missing<-colSums(is.na(StudentData))
+print(Missing)#No missing data and hyd_pressure1 was removed as it was the variable with a variance near zero
+
+```
+
+ 
+```{r, Correlation}
+
+cor_matrix<-StudentData|>
+  select_if(is.numeric)|>
+  cor()
+
+# Set threshold for correlation
+threshold <- 0.9
+
+# Removed columns with correlation over threshold
+high_cor_indices <- findCorrelation(cor_matrix, cutoff = threshold)
+
+# Removed those columns from StudentData
+StudentData <- StudentData[, -high_cor_indices]
+#Removed hyd_pressure2, hyd_presure4, filler_level, carb_flow , mfr, air_pressure
+
+```
+
+```{r}
+##Correlation Plot
+corrplot(cor_martrix, method = "color", type="upper",
+         tl.col = "black", tl.cex = .8,
+         addCoef.col ="black", number.cex = .5,
+         diag=FALSE)
+```
+
+
 
 ## Exploratory Data Analysis
 
