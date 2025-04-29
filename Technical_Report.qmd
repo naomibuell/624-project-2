@@ -150,7 +150,7 @@ StudentData <- StudentData[, -high_cor_indices]
 
 ```{r}
 ##Correlation Plot
-corrplot(cor_martrix, method = "color", type="upper",
+corrplot(StudentData, method = "color", type="upper",
          tl.col = "black", tl.cex = .8,
          addCoef.col ="black", number.cex = .5,
          diag=FALSE)
