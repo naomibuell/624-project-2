@@ -108,7 +108,7 @@ StudentData<-StudentData|>
 #| include: false
 StudentData<-mice(StudentData, method = "pmm",#pmm=predictive mean matching
                 m=5, #number of imputed dataset usually 5 is default, keep in mind it will take some time.
-                maxit=50,#number of max iteration
+                maxit=5,#number of max iteration
                 seed=10)|>
   complete()
 
@@ -158,6 +158,21 @@ corrplot(cor_matrix2, method = "color", type="upper",
          tl.col = "black", tl.cex = .8,
          addCoef.col ="black", number.cex = .5,
          diag=FALSE)
+```
+
+```{r}
+#missing data in StudentEvaluation
+Missing2<-colSums(is.na(StudentEvaluation))
+print(Missing2)
+```
+
+```{r}
+StudentEvaluation<-mice(StudentEvaluation, method = "pmm",
+                m=5,
+                maxit = 5,
+                seed=10)|>
+  complete()
+#the imputation left pH column untouched and brand_code.
 ```
 
 
