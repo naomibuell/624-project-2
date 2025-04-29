@@ -23,6 +23,9 @@ We will use the following packages for data analysis, modeling, and visualizatio
 
 ```{r}
 #| label: load packages
+
+Sys.setenv(JAVA_HOME = "C:/Program Files/TreeAgePro/jre18162")
+
 library(DataExplorer)
 library(tidyverse)
 library(readxl)
@@ -38,6 +41,7 @@ library(tidyr)
 library(mice)
 library(janitor)
 library(dplyr)
+
 ```
 
 We will also set the seed for reproducibility.
@@ -75,66 +79,68 @@ StudentData <- read_excel("StudentData.xlsx") # Training data
 StudentEvaluation <- read_excel("StudentEvaluation.xlsx") # Test data
 ```
 
-## Tidy Data and Tranformation
+## Tidy Data and Transformation
+
+In this section, we mutate variable types (e.g., convert character column `Brand Code` to factor, numeric, etc., so we can use this to forecast data) and impute missing data where needed. We also check correlation, removing features over a threshold to avoid multicollinearity, and remove near zero variance predictors with `nearZeroVar()`.
 
 ```{r}
 #| echo: false
-str(StudentData) #Column names are with spaces will clean up to make it easier to work with in R.
+str(StudentData) # Column names are with spaces will clean up to make it easier to work with in R.
 ```
 
-```{r}
-#| echo: false
-StudentData<-clean_names(StudentData)
-summary(StudentData) 
-```
+We impute missing data below. It is best to impute data when missing data is it less than 5%, brand code rounds up to 5% which is why the missing data for brand code will be removed rather.
 
 ```{r}
 #| echo: false
-#It is best to impute data when missing data is it less than 5%, brand code rounds up to 5% which is why the missing data for brand code will be removed rather.
-Missing<-(colSums(is.na(StudentData))/2571)*100
+
+Missing <- (colSums(is.na(StudentData)) / 2571) * 100
 print(Missing)
-
 ```
 
+The missing data for brand code were removed as imputation wouldn't appripiate and leaving it missing would cause misleading results in our analysis. For the missing data the MICE function was used to impute missing data that are numerical.
 
 ```{r}
 #| include: false
-#The missing data for brand code were removed as imputation wouldn't appripiate and leaving it missing would cause misleading results in our analysis. For the missing data the MICE function was used to impute missing data that are numerical.
-StudentData<-StudentData|>
-  drop_na(brand_code)
+
+StudentData <- StudentData |>
+    drop_na("Brand Code")
 ```
 
 ```{r}
 #| include: false
-StudentData<-mice(StudentData, method = "pmm",#pmm=predictive mean matching
-                m=5, #number of imputed dataset usually 5 is default, keep in mind it will take some time.
-                maxit=5,#number of max iteration
-                seed=10)|>
-  complete()
+StudentData <- mice(
+    StudentData,
+    method = "pmm", # pmm=predictive mean matching
+    m = 5, # number of imputed dataset usually 5 is default, keep in mind it will take some time.
+    maxit = 5, # number of max iteration
+    seed = 10
+) |>
+    complete()
 
 ```
 
+Removed near zero variance variables.
 
 ```{r}
-Removed near zero variance variables
 #| include: false
-StudentData<-StudentData[, -nearZeroVar(StudentData)]
+StudentData <- StudentData[, -nearZeroVar(StudentData)]
 ```
 
 ```{r}
 #| echo: false
-#Check for missing data again
-Missing<-colSums(is.na(StudentData))
-print(Missing)#No missing data and hyd_pressure1 was removed as it was the variable with a variance near zero
+# Check for missing data again
+Missing <- colSums(is.na(StudentData))
+print(Missing) # No missing data and hyd_pressure1 was removed as it was the variable with a variance near zero
 
 ```
 
- 
+Now there is no missing data and `hyd_pressure1` was removed as it was the variable with a variance near zero.
+
 ```{r, Correlation}
 
-cor_matrix<-StudentData|>
-  select_if(is.numeric)|>
-  cor()
+cor_matrix <- StudentData |>
+    select_if(is.numeric) |>
+    cor()
 
 # Set threshold for correlation
 threshold <- 0.9
@@ -144,38 +150,55 @@ high_cor_indices <- findCorrelation(cor_matrix, cutoff = threshold)
 
 # Removed those columns from StudentData
 StudentData <- StudentData[, -high_cor_indices]
-#Removed hyd_pressure2, hyd_presure4, filler_level, carb_flow , mfr, air_pressure
+# Removed hyd_pressure2, hyd_presure4, filler_level, carb_flow , mfr, air_pressure
 
-cor_matrix2<-StudentData|>
-  select_if(is.numeric)|>
-  cor()
-
+cor_matrix2 <- StudentData |>
+    select_if(is.numeric) |>
+    cor()
 ```
 
 ```{r}
-##Correlation Plot
-corrplot(cor_matrix2, method = "color", type="upper",
-         tl.col = "black", tl.cex = .8,
-         addCoef.col ="black", number.cex = .5,
-         diag=FALSE)
+## Correlation Plot
+corrplot(
+    cor_matrix2,
+    method = "color",
+    type = "upper",
+    tl.col = "black",
+    tl.cex = .8,
+    addCoef.col = "black",
+    number.cex = .5,
+    diag = FALSE
+)
 ```
 
 ```{r}
-#missing data in StudentEvaluation
-Missing2<-colSums(is.na(StudentEvaluation))
+# missing data in StudentEvaluation
+Missing2 <- colSums(is.na(StudentEvaluation))
 print(Missing2)
 ```
 
 ```{r}
-StudentEvaluation<-mice(StudentEvaluation, method = "pmm",
-                m=5,
-                maxit = 5,
-                seed=10)|>
-  complete()
-#the imputation left pH column untouched and brand_code.
+StudentEvaluation <- mice(
+    StudentEvaluation,
+    method = "pmm",
+    m = 5,
+    maxit = 5,
+    seed = 10
+) |>
+    complete()
+
 ```
 
+The imputation left `pH` and `brand_code` columns untouched.
 
+Lastly, we change all variable types to numeric.
+
+```{r}
+StudentData <- StudentData[, sapply(
+    StudentData,
+    is.numeric
+ )]
+```
 
 ## Exploratory Data Analysis
 
@@ -242,20 +265,6 @@ From the visualizations and summary statistics above, we can observe:
     -   There are some strong correlations between predictors, suggesting potential multicollinearity. We should address multicollinearity in the data cleaning phase
 3.  Missing values:
     -   Several variables contain missing values that will need to be addressed, especially `MFR`
-
-## Clean and Tidy Data
-
-Mutate variable types (e.g., convert character column `Brand Code` to factor, numeric, etc., so we can use this to forecast data).
-
-Browse and remove outliers if necessary.
-
-Impute and transform if necessary.
-
--   Andreina to impute
-
--   Adreina to check correlation, remove features that have correlation over some threshold
-
--   Remove near zero variance predictors with `nearZeroVar()`.
 
 ## Forecast
 
@@ -326,12 +335,6 @@ plsPred <- predict(
 ```{r}
 #| label: elastic-net
 #| warning: false
-
-# <!--NB to DELETE this line after data cleaning section is completed and variable types are changed to numeric-->
-StudentData_train_x <- StudentData_train_x[, sapply(
-    StudentData_train_x,
-    is.numeric
-)]
 
 # Train
 enetGrid <- expand.grid(
@@ -494,14 +497,14 @@ if (best == "PLS") {
 }
 
 StudentEvaluation_x <- StudentEvaluation |>
-    select(-PH) |>
-    drop_na() # <!--NB to DELETE this line after imputation section is completed-->
+    select(-PH) 
 
 # Combine predictions with the test set
 predictions <- data.frame(
     StudentEvaluation_x,
     PH = predict(finalTune, newdata = StudentEvaluation_x)
-)
+) |> 
+  rename(PH = y)
 ```
 
 ## Export

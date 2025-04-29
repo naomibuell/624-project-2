@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ali Ahmed, Andreina Arias, Kaylie Evans, Naomi Buell, and Zaneta Paulusova">
-<meta name="dcterms.date" content="2025-04-23">
+<meta name="dcterms.date" content="2025-04-29">
 
 <title>DATA 624 Project 2: Technical Report</title>
 <style>
@@ -68,7 +68,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="Technical_Report_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="Technical_Report_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Technical_Report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Technical_Report_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="Technical_Report_files/libs/bootstrap/bootstrap-8a79a254b8e706d3c925cde0a310d4f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 23, 2025</p>
+      <p class="date">April 29, 2025</p>
     </div>
   </div>
   
@@ -124,8 +124,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>We will use the following packages for data analysis, modeling, and visualization.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DataExplorer)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">JAVA_HOME =</span> <span class="st">"C:/Program Files/TreeAgePro/jre18162"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DataExplorer)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
@@ -141,30 +143,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpp3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'fpp3' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
 <pre><code>Registered S3 method overwritten by 'tsibble':
   method               from 
   as_tibble.grouped_df dplyr
 ── Attaching packages ──────────────────────────────────────────── fpp3 1.0.1 ──
-✔ tsibble     1.1.5     ✔ feasts      0.4.1
-✔ tsibbledata 0.4.1     ✔ fable       0.4.1</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'tsibble' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'feasts' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'fabletools' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'fable' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Conflicts ───────────────────────────────────────────────── fpp3_conflicts ──
+✔ tsibble     1.1.6     ✔ feasts      0.4.1
+✔ tsibbledata 0.4.1     ✔ fable       0.3.4
+── Conflicts ───────────────────────────────────────────────── fpp3_conflicts ──
 ✖ lubridate::date()    masks base::date()
 ✖ dplyr::filter()      masks stats::filter()
 ✖ tsibble::intersect() masks base::intersect()
@@ -173,10 +158,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ tsibble::setdiff()   masks base::setdiff()
 ✖ tsibble::union()     masks base::union()</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'caret' was built under R version 4.3.3</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: lattice
 
@@ -190,8 +172,8 @@ The following object is masked from 'package:purrr':
 
     lift</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: foreach
 
@@ -204,47 +186,268 @@ The following objects are masked from 'package:purrr':
 Loading required package: iterators
 Loading required package: parallel</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RWeka)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'rpart' was built under R version 4.3.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'corrplot' was built under R version 4.3.3</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RWeka)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>corrplot 0.95 loaded</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openxlsx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openxlsx)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mice)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'openxlsx' was built under R version 4.3.3</code></pre>
+<pre><code>
+Attaching package: 'mice'
+
+The following object is masked from 'package:stats':
+
+    filter
+
+The following objects are masked from 'package:base':
+
+    cbind, rbind</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'janitor'
+
+The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will also set the seed for reproducibility.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Since these models take a long time to train, we’ll utilize the <code>doParallel</code> package for speed.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>cluster <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    cluster</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>cluster <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    cluster</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="load-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-data">Load data</h2>
 <p>First, we load the data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentData.xlsx"</span>) <span class="co"># Training data</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentEvaluation.xlsx"</span>) <span class="co"># Test data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentData.xlsx"</span>) <span class="co"># Training data</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"StudentEvaluation.xlsx"</span>) <span class="co"># Test data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tidy-data-and-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="tidy-data-and-transformation">Tidy Data and Transformation</h2>
+<p>In this section, we mutate variable types (e.g., convert character column <code>Brand Code</code> to factor, numeric, etc., so we can use this to forecast data) and impute missing data where needed. We also check correlation, removing features over a threshold to avoid multicollinearity, and remove near zero variance predictors with <code>nearZeroVar()</code>.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [2,571 × 33] (S3: tbl_df/tbl/data.frame)
+ $ Brand Code       : chr [1:2571] "B" "A" "B" "A" ...
+ $ Carb Volume      : num [1:2571] 5.34 5.43 5.29 5.44 5.49 ...
+ $ Fill Ounces      : num [1:2571] 24 24 24.1 24 24.3 ...
+ $ PC Volume        : num [1:2571] 0.263 0.239 0.263 0.293 0.111 ...
+ $ Carb Pressure    : num [1:2571] 68.2 68.4 70.8 63 67.2 66.6 64.2 67.6 64.2 72 ...
+ $ Carb Temp        : num [1:2571] 141 140 145 133 137 ...
+ $ PSC              : num [1:2571] 0.104 0.124 0.09 NA 0.026 0.09 0.128 0.154 0.132 0.014 ...
+ $ PSC Fill         : num [1:2571] 0.26 0.22 0.34 0.42 0.16 ...
+ $ PSC CO2          : num [1:2571] 0.04 0.04 0.16 0.04 0.12 ...
+ $ Mnf Flow         : num [1:2571] -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 ...
+ $ Carb Pressure1   : num [1:2571] 119 122 120 115 118 ...
+ $ Fill Pressure    : num [1:2571] 46 46 46 46.4 45.8 45.6 51.8 46.8 46 45.2 ...
+ $ Hyd Pressure1    : num [1:2571] 0 0 0 0 0 0 0 0 0 0 ...
+ $ Hyd Pressure2    : num [1:2571] NA NA NA 0 0 0 0 0 0 0 ...
+ $ Hyd Pressure3    : num [1:2571] NA NA NA 0 0 0 0 0 0 0 ...
+ $ Hyd Pressure4    : num [1:2571] 118 106 82 92 92 116 124 132 90 108 ...
+ $ Filler Level     : num [1:2571] 121 119 120 118 119 ...
+ $ Filler Speed     : num [1:2571] 4002 3986 4020 4012 4010 ...
+ $ Temperature      : num [1:2571] 66 67.6 67 65.6 65.6 66.2 65.8 65.2 65.4 66.6 ...
+ $ Usage cont       : num [1:2571] 16.2 19.9 17.8 17.4 17.7 ...
+ $ Carb Flow        : num [1:2571] 2932 3144 2914 3062 3054 ...
+ $ Density          : num [1:2571] 0.88 0.92 1.58 1.54 1.54 1.52 0.84 0.84 0.9 0.9 ...
+ $ MFR              : num [1:2571] 725 727 735 731 723 ...
+ $ Balling          : num [1:2571] 1.4 1.5 3.14 3.04 3.04 ...
+ $ Pressure Vacuum  : num [1:2571] -4 -4 -3.8 -4.4 -4.4 -4.4 -4.4 -4.4 -4.4 -4.4 ...
+ $ PH               : num [1:2571] 8.36 8.26 8.94 8.24 8.26 8.32 8.4 8.38 8.38 8.5 ...
+ $ Oxygen Filler    : num [1:2571] 0.022 0.026 0.024 0.03 0.03 0.024 0.066 0.046 0.064 0.022 ...
+ $ Bowl Setpoint    : num [1:2571] 120 120 120 120 120 120 120 120 120 120 ...
+ $ Pressure Setpoint: num [1:2571] 46.4 46.8 46.6 46 46 46 46 46 46 46 ...
+ $ Air Pressurer    : num [1:2571] 143 143 142 146 146 ...
+ $ Alch Rel         : num [1:2571] 6.58 6.56 7.66 7.14 7.14 7.16 6.54 6.52 6.52 6.54 ...
+ $ Carb Rel         : num [1:2571] 5.32 5.3 5.84 5.42 5.44 5.44 5.38 5.34 5.34 5.34 ...
+ $ Balling Lvl      : num [1:2571] 1.48 1.56 3.28 3.04 3.04 3.02 1.44 1.44 1.44 1.38 ...</code></pre>
+</div>
+</div>
+<p>We impute missing data below. It is best to impute data when missing data is it less than 5%, brand code rounds up to 5% which is why the missing data for brand code will be removed rather.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>       Brand Code       Carb Volume       Fill Ounces         PC Volume 
+       4.66744457        0.38895371        1.47802412        1.51691949 
+    Carb Pressure         Carb Temp               PSC          PSC Fill 
+       1.05017503        1.01127966        1.28354726        0.89459354 
+          PSC CO2          Mnf Flow    Carb Pressure1     Fill Pressure 
+       1.51691949        0.07779074        1.24465189        0.85569817 
+    Hyd Pressure1     Hyd Pressure2     Hyd Pressure3     Hyd Pressure4 
+       0.42784909        0.58343057        0.58343057        1.16686114 
+     Filler Level      Filler Speed       Temperature        Usage cont 
+       0.77790743        2.21703617        0.54453520        0.19447686 
+        Carb Flow           Density               MFR           Balling 
+       0.07779074        0.03889537        8.24581875        0.03889537 
+  Pressure Vacuum                PH     Oxygen Filler     Bowl Setpoint 
+       0.00000000        0.15558149        0.46674446        0.07779074 
+Pressure Setpoint     Air Pressurer          Alch Rel          Carb Rel 
+       0.46674446        0.00000000        0.35005834        0.38895371 
+      Balling Lvl 
+       0.03889537 </code></pre>
+</div>
+</div>
+<p>The missing data for brand code were removed as imputation wouldn’t appripiate and leaving it missing would cause misleading results in our analysis. For the missing data the MICE function was used to impute missing data that are numerical.</p>
+<p>Removed near zero variance variables.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>       Brand Code       Carb Volume       Fill Ounces         PC Volume 
+                0                 0                 0                 0 
+    Carb Pressure         Carb Temp               PSC          PSC Fill 
+                0                 0                 0                 0 
+          PSC CO2          Mnf Flow    Carb Pressure1     Fill Pressure 
+                0                 0                 0                 0 
+    Hyd Pressure2     Hyd Pressure3     Hyd Pressure4      Filler Level 
+                0                 0                 0                 0 
+     Filler Speed       Temperature        Usage cont         Carb Flow 
+                0                 0                 0                 0 
+          Density               MFR           Balling   Pressure Vacuum 
+                0                 0                 0                 0 
+               PH     Oxygen Filler     Bowl Setpoint Pressure Setpoint 
+                0                 0                 0                 0 
+    Air Pressurer          Alch Rel          Carb Rel       Balling Lvl 
+                0                 0                 0                 0 </code></pre>
+</div>
+</div>
+<p>Now there is no missing data and <code>hyd_pressure1</code> was removed as it was the variable with a variance near zero.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select_if</span>(is.numeric) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cor</span>()</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set threshold for correlation</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>threshold <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Removed columns with correlation over threshold</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>high_cor_indices <span class="ot">&lt;-</span> <span class="fu">findCorrelation</span>(cor_matrix, <span class="at">cutoff =</span> threshold)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Removed those columns from StudentData</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> StudentData[, <span class="sc">-</span>high_cor_indices]</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Removed hyd_pressure2, hyd_presure4, filler_level, carb_flow , mfr, air_pressure</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>cor_matrix2 <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select_if</span>(is.numeric) <span class="sc">|&gt;</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cor</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Correlation Plot</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    cor_matrix2,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"color"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">"upper"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tl.col =</span> <span class="st">"black"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">tl.cex =</span> .<span class="dv">8</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">addCoef.col =</span> <span class="st">"black"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">number.cex =</span> .<span class="dv">5</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">diag =</span> <span class="cn">FALSE</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Technical_Report_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># missing data in StudentEvaluation</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>Missing2 <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(StudentEvaluation))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(Missing2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Brand Code       Carb Volume       Fill Ounces         PC Volume 
+                8                 1                 6                 4 
+    Carb Pressure         Carb Temp               PSC          PSC Fill 
+                0                 1                 5                 3 
+          PSC CO2          Mnf Flow    Carb Pressure1     Fill Pressure 
+                5                 0                 4                 2 
+    Hyd Pressure1     Hyd Pressure2     Hyd Pressure3     Hyd Pressure4 
+                0                 1                 1                 4 
+     Filler Level      Filler Speed       Temperature        Usage cont 
+                2                10                 2                 2 
+        Carb Flow           Density               MFR           Balling 
+                0                 1                31                 1 
+  Pressure Vacuum                PH     Oxygen Filler     Bowl Setpoint 
+                1               267                 3                 1 
+Pressure Setpoint     Air Pressurer          Alch Rel          Carb Rel 
+                2                 1                 3                 2 
+      Balling Lvl 
+                0 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="ot">&lt;-</span> <span class="fu">mice</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    StudentEvaluation,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"pmm"</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">m =</span> <span class="dv">5</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxit =</span> <span class="dv">5</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">10</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">complete</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ iter imp variable
+  1   1  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  1   2  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  1   3  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  1   4  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  1   5  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  2   1  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  2   2  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  2   3  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  2   4  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  2   5  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  3   1  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  3   2  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  3   3  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  3   4  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  3   5  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  4   1  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  4   2  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  4   3  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  4   4  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  4   5  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  5   1  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  5   2  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  5   3  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  5   4  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel
+  5   5  Carb Volume  Fill Ounces  PC Volume  Carb Temp  PSC  PSC Fill  PSC CO2  Carb Pressure1  Fill Pressure  Hyd Pressure2  Hyd Pressure3  Hyd Pressure4  Filler Level  Filler Speed  Temperature  Usage cont  Density  MFR  Balling  Pressure Vacuum  Oxygen Filler  Bowl Setpoint  Pressure Setpoint  Air Pressurer  Alch Rel  Carb Rel</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Number of logged events: 2</code></pre>
+</div>
+</div>
+<p>The imputation left <code>pH</code> and <code>brand_code</code> columns untouched.</p>
+<p>Lastly, we change all variable types to numeric.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> StudentData[, <span class="fu">sapply</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    StudentData,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    is.numeric</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a> )]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="exploratory-data-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
 <p>We browse the data below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>StudentData <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -255,11 +458,11 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Number of rows</td>
-<td style="text-align: left;">2571</td>
+<td style="text-align: left;">2451</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Number of columns</td>
-<td style="text-align: left;">33</td>
+<td style="text-align: left;">25</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">_______________________</td>
@@ -270,57 +473,16 @@ Loading required package: parallel</code></pre>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">character</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">25</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">numeric</td>
-<td style="text-align: left;">32</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">________________________</td>
 <td style="text-align: left;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Group variables</td>
 <td style="text-align: left;">None</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Variable type: character</strong></p>
-<table class="caption-top table table-sm table-striped small">
-<colgroup>
-<col style="width: 19%">
-<col style="width: 13%">
-<col style="width: 19%">
-<col style="width: 5%">
-<col style="width: 5%">
-<col style="width: 8%">
-<col style="width: 12%">
-<col style="width: 15%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">skim_variable</th>
-<th style="text-align: right;">n_missing</th>
-<th style="text-align: right;">complete_rate</th>
-<th style="text-align: right;">min</th>
-<th style="text-align: right;">max</th>
-<th style="text-align: right;">empty</th>
-<th style="text-align: right;">n_unique</th>
-<th style="text-align: right;">whitespace</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Brand Code</td>
-<td style="text-align: right;">120</td>
-<td style="text-align: right;">0.95</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">0</td>
 </tr>
 </tbody>
 </table>
@@ -331,7 +493,7 @@ Loading required package: parallel</code></pre>
 <col style="width: 9%">
 <col style="width: 13%">
 <col style="width: 7%">
-<col style="width: 7%">
+<col style="width: 6%">
 <col style="width: 7%">
 <col style="width: 7%">
 <col style="width: 7%">
@@ -357,21 +519,21 @@ Loading required package: parallel</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Carb Volume</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">5.37</td>
 <td style="text-align: right;">0.11</td>
 <td style="text-align: right;">5.04</td>
 <td style="text-align: right;">5.29</td>
 <td style="text-align: right;">5.35</td>
-<td style="text-align: right;">5.45</td>
+<td style="text-align: right;">5.46</td>
 <td style="text-align: right;">5.70</td>
-<td style="text-align: left;">▁▆▇▅▁</td>
+<td style="text-align: left;">▁▅▇▅▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fill Ounces</td>
-<td style="text-align: right;">38</td>
-<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">23.97</td>
 <td style="text-align: right;">0.09</td>
 <td style="text-align: right;">23.63</td>
@@ -379,29 +541,29 @@ Loading required package: parallel</code></pre>
 <td style="text-align: right;">23.97</td>
 <td style="text-align: right;">24.03</td>
 <td style="text-align: right;">24.32</td>
-<td style="text-align: left;">▁▂▇▂▁</td>
+<td style="text-align: left;">▁▃▇▂▁</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">PC Volume</td>
-<td style="text-align: right;">39</td>
-<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.28</td>
 <td style="text-align: right;">0.06</td>
-<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.09</td>
 <td style="text-align: right;">0.24</td>
 <td style="text-align: right;">0.27</td>
 <td style="text-align: right;">0.31</td>
-<td style="text-align: right;">0.48</td>
-<td style="text-align: left;">▁▃▇▂▁</td>
+<td style="text-align: right;">0.47</td>
+<td style="text-align: left;">▁▃▇▃▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Carb Pressure</td>
-<td style="text-align: right;">27</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">68.19</td>
-<td style="text-align: right;">3.54</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">68.31</td>
+<td style="text-align: right;">3.55</td>
 <td style="text-align: right;">57.00</td>
-<td style="text-align: right;">65.60</td>
+<td style="text-align: right;">65.80</td>
 <td style="text-align: right;">68.20</td>
 <td style="text-align: right;">70.60</td>
 <td style="text-align: right;">79.40</td>
@@ -409,21 +571,21 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Carb Temp</td>
-<td style="text-align: right;">26</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">141.09</td>
-<td style="text-align: right;">4.04</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">141.16</td>
+<td style="text-align: right;">4.12</td>
 <td style="text-align: right;">128.60</td>
 <td style="text-align: right;">138.40</td>
 <td style="text-align: right;">140.80</td>
 <td style="text-align: right;">143.80</td>
 <td style="text-align: right;">154.00</td>
-<td style="text-align: left;">▁▅▇▃▁</td>
+<td style="text-align: left;">▁▃▇▃▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PSC</td>
-<td style="text-align: right;">33</td>
-<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.08</td>
 <td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.00</td>
@@ -435,8 +597,8 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">PSC Fill</td>
-<td style="text-align: right;">23</td>
-<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.20</td>
 <td style="text-align: right;">0.12</td>
 <td style="text-align: right;">0.00</td>
@@ -448,8 +610,8 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PSC CO2</td>
-<td style="text-align: right;">39</td>
-<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.06</td>
 <td style="text-align: right;">0.04</td>
 <td style="text-align: right;">0.00</td>
@@ -461,25 +623,25 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Mnf Flow</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">24.57</td>
-<td style="text-align: right;">119.48</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">24.45</td>
+<td style="text-align: right;">119.73</td>
 <td style="text-align: right;">-100.20</td>
 <td style="text-align: right;">-100.00</td>
 <td style="text-align: right;">65.20</td>
-<td style="text-align: right;">140.80</td>
-<td style="text-align: right;">229.40</td>
-<td style="text-align: left;">▇▁▁▇▂</td>
+<td style="text-align: right;">141.20</td>
+<td style="text-align: right;">216.20</td>
+<td style="text-align: left;">▇▁▁▆▂</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Carb Pressure1</td>
-<td style="text-align: right;">32</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">122.59</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">122.52</td>
 <td style="text-align: right;">4.74</td>
 <td style="text-align: right;">105.60</td>
-<td style="text-align: right;">119.00</td>
+<td style="text-align: right;">118.80</td>
 <td style="text-align: right;">123.20</td>
 <td style="text-align: right;">125.40</td>
 <td style="text-align: right;">140.20</td>
@@ -487,10 +649,10 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fill Pressure</td>
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">47.92</td>
-<td style="text-align: right;">3.18</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">47.88</td>
+<td style="text-align: right;">3.17</td>
 <td style="text-align: right;">34.60</td>
 <td style="text-align: right;">46.00</td>
 <td style="text-align: right;">46.40</td>
@@ -499,78 +661,26 @@ Loading required package: parallel</code></pre>
 <td style="text-align: left;">▁▁▇▂▁</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Hyd Pressure1</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">12.44</td>
-<td style="text-align: right;">12.43</td>
-<td style="text-align: right;">-0.80</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">11.40</td>
-<td style="text-align: right;">20.20</td>
-<td style="text-align: right;">58.00</td>
-<td style="text-align: left;">▇▅▂▁▁</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Hyd Pressure2</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">20.96</td>
-<td style="text-align: right;">16.39</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">28.60</td>
-<td style="text-align: right;">34.60</td>
-<td style="text-align: right;">59.40</td>
-<td style="text-align: left;">▇▂▇▅▁</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">Hyd Pressure3</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">20.46</td>
-<td style="text-align: right;">15.98</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">20.44</td>
+<td style="text-align: right;">15.97</td>
 <td style="text-align: right;">-1.20</td>
 <td style="text-align: right;">0.00</td>
-<td style="text-align: right;">27.60</td>
-<td style="text-align: right;">33.40</td>
+<td style="text-align: right;">27.40</td>
+<td style="text-align: right;">33.20</td>
 <td style="text-align: right;">50.00</td>
 <td style="text-align: left;">▇▁▃▇▁</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Hyd Pressure4</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">96.29</td>
-<td style="text-align: right;">13.12</td>
-<td style="text-align: right;">52.00</td>
-<td style="text-align: right;">86.00</td>
-<td style="text-align: right;">96.00</td>
-<td style="text-align: right;">102.00</td>
-<td style="text-align: right;">142.00</td>
-<td style="text-align: left;">▁▃▇▂▁</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Filler Level</td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">109.25</td>
-<td style="text-align: right;">15.70</td>
-<td style="text-align: right;">55.80</td>
-<td style="text-align: right;">98.30</td>
-<td style="text-align: right;">118.40</td>
-<td style="text-align: right;">120.00</td>
-<td style="text-align: right;">161.20</td>
-<td style="text-align: left;">▁▃▅▇▁</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Filler Speed</td>
-<td style="text-align: right;">57</td>
-<td style="text-align: right;">0.98</td>
-<td style="text-align: right;">3687.20</td>
-<td style="text-align: right;">770.82</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3643.07</td>
+<td style="text-align: right;">835.39</td>
 <td style="text-align: right;">998.00</td>
-<td style="text-align: right;">3888.00</td>
+<td style="text-align: right;">3866.00</td>
 <td style="text-align: right;">3982.00</td>
 <td style="text-align: right;">3998.00</td>
 <td style="text-align: right;">4030.00</td>
@@ -578,10 +688,10 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Temperature</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">65.97</td>
-<td style="text-align: right;">1.38</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">65.92</td>
+<td style="text-align: right;">1.35</td>
 <td style="text-align: right;">63.60</td>
 <td style="text-align: right;">65.20</td>
 <td style="text-align: right;">65.60</td>
@@ -591,74 +701,48 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Usage cont</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">20.99</td>
-<td style="text-align: right;">2.98</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">21.00</td>
+<td style="text-align: right;">2.97</td>
 <td style="text-align: right;">12.08</td>
-<td style="text-align: right;">18.36</td>
-<td style="text-align: right;">21.79</td>
-<td style="text-align: right;">23.75</td>
+<td style="text-align: right;">18.39</td>
+<td style="text-align: right;">21.80</td>
+<td style="text-align: right;">23.76</td>
 <td style="text-align: right;">25.90</td>
 <td style="text-align: left;">▁▃▅▃▇</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Carb Flow</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">2468.35</td>
-<td style="text-align: right;">1073.70</td>
-<td style="text-align: right;">26.00</td>
-<td style="text-align: right;">1144.00</td>
-<td style="text-align: right;">3028.00</td>
-<td style="text-align: right;">3186.00</td>
-<td style="text-align: right;">5104.00</td>
-<td style="text-align: left;">▂▅▆▇▁</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Density</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">1.17</td>
+<td style="text-align: right;">1.18</td>
 <td style="text-align: right;">0.38</td>
 <td style="text-align: right;">0.24</td>
 <td style="text-align: right;">0.90</td>
 <td style="text-align: right;">0.98</td>
-<td style="text-align: right;">1.62</td>
+<td style="text-align: right;">1.64</td>
 <td style="text-align: right;">1.92</td>
 <td style="text-align: left;">▁▅▇▂▆</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">MFR</td>
-<td style="text-align: right;">212</td>
-<td style="text-align: right;">0.92</td>
-<td style="text-align: right;">704.05</td>
-<td style="text-align: right;">73.90</td>
-<td style="text-align: right;">31.40</td>
-<td style="text-align: right;">706.30</td>
-<td style="text-align: right;">724.00</td>
-<td style="text-align: right;">731.00</td>
-<td style="text-align: right;">868.60</td>
-<td style="text-align: left;">▁▁▁▂▇</td>
-</tr>
 <tr class="odd">
 <td style="text-align: left;">Balling</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">2.20</td>
-<td style="text-align: right;">0.93</td>
+<td style="text-align: right;">2.22</td>
+<td style="text-align: right;">0.94</td>
 <td style="text-align: right;">-0.17</td>
 <td style="text-align: right;">1.50</td>
 <td style="text-align: right;">1.65</td>
-<td style="text-align: right;">3.29</td>
+<td style="text-align: right;">3.34</td>
 <td style="text-align: right;">4.01</td>
-<td style="text-align: left;">▁▇▇▁▇</td>
+<td style="text-align: left;">▁▇▇▂▇</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Pressure Vacuum</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">-5.22</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-5.21</td>
 <td style="text-align: right;">0.57</td>
 <td style="text-align: right;">-6.60</td>
 <td style="text-align: right;">-5.60</td>
@@ -669,8 +753,8 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">PH</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">8.55</td>
 <td style="text-align: right;">0.17</td>
 <td style="text-align: right;">7.88</td>
@@ -682,8 +766,8 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Oxygen Filler</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.00</td>
@@ -695,10 +779,10 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Bowl Setpoint</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">109.33</td>
-<td style="text-align: right;">15.30</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">109.16</td>
+<td style="text-align: right;">15.37</td>
 <td style="text-align: right;">70.00</td>
 <td style="text-align: right;">100.00</td>
 <td style="text-align: right;">120.00</td>
@@ -708,10 +792,10 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Pressure Setpoint</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">47.62</td>
-<td style="text-align: right;">2.04</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">47.60</td>
+<td style="text-align: right;">2.03</td>
 <td style="text-align: right;">44.00</td>
 <td style="text-align: right;">46.00</td>
 <td style="text-align: right;">46.00</td>
@@ -720,61 +804,48 @@ Loading required package: parallel</code></pre>
 <td style="text-align: left;">▁▇▁▆▁</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Air Pressurer</td>
+<td style="text-align: left;">Alch Rel</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">142.83</td>
-<td style="text-align: right;">1.21</td>
-<td style="text-align: right;">140.80</td>
-<td style="text-align: right;">142.20</td>
-<td style="text-align: right;">142.60</td>
-<td style="text-align: right;">143.00</td>
-<td style="text-align: right;">148.20</td>
-<td style="text-align: left;">▅▇▁▁▁</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.91</td>
+<td style="text-align: right;">0.51</td>
+<td style="text-align: right;">6.24</td>
+<td style="text-align: right;">6.54</td>
+<td style="text-align: right;">6.58</td>
+<td style="text-align: right;">7.62</td>
+<td style="text-align: right;">8.56</td>
+<td style="text-align: left;">▇▁▁▃▁</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Alch Rel</td>
-<td style="text-align: right;">9</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">6.90</td>
-<td style="text-align: right;">0.51</td>
-<td style="text-align: right;">5.28</td>
-<td style="text-align: right;">6.54</td>
-<td style="text-align: right;">6.56</td>
-<td style="text-align: right;">7.24</td>
-<td style="text-align: right;">8.62</td>
-<td style="text-align: left;">▁▇▂▃▁</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Carb Rel</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">5.44</td>
 <td style="text-align: right;">0.13</td>
 <td style="text-align: right;">4.96</td>
 <td style="text-align: right;">5.34</td>
 <td style="text-align: right;">5.40</td>
-<td style="text-align: right;">5.54</td>
+<td style="text-align: right;">5.56</td>
 <td style="text-align: right;">6.06</td>
 <td style="text-align: left;">▁▇▇▂▁</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Balling Lvl</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">2.05</td>
-<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">2.08</td>
+<td style="text-align: right;">0.88</td>
 <td style="text-align: right;">0.00</td>
 <td style="text-align: right;">1.38</td>
 <td style="text-align: right;">1.48</td>
-<td style="text-align: right;">3.14</td>
+<td style="text-align: right;">3.16</td>
 <td style="text-align: right;">3.66</td>
 <td style="text-align: left;">▁▇▂▁▆</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>StudentEvaluation <span class="sc">|&gt;</span> <span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -912,21 +983,21 @@ Loading required package: parallel</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Carb Volume</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
 <td style="text-align: right;">5.37</td>
 <td style="text-align: right;">0.11</td>
 <td style="text-align: right;">5.15</td>
-<td style="text-align: right;">5.29</td>
+<td style="text-align: right;">5.28</td>
 <td style="text-align: right;">5.34</td>
-<td style="text-align: right;">5.47</td>
+<td style="text-align: right;">5.46</td>
 <td style="text-align: right;">5.67</td>
 <td style="text-align: left;">▂▇▃▅▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fill Ounces</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">23.97</td>
 <td style="text-align: right;">0.08</td>
 <td style="text-align: right;">23.75</td>
@@ -938,8 +1009,8 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">PC Volume</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.28</td>
 <td style="text-align: right;">0.06</td>
 <td style="text-align: right;">0.10</td>
@@ -952,7 +1023,7 @@ Loading required package: parallel</code></pre>
 <tr class="even">
 <td style="text-align: left;">Carb Pressure</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">68.25</td>
 <td style="text-align: right;">3.86</td>
 <td style="text-align: right;">60.20</td>
@@ -964,25 +1035,25 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Carb Temp</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">141.23</td>
-<td style="text-align: right;">4.30</td>
+<td style="text-align: right;">141.27</td>
+<td style="text-align: right;">4.36</td>
 <td style="text-align: right;">130.00</td>
 <td style="text-align: right;">138.40</td>
 <td style="text-align: right;">140.80</td>
-<td style="text-align: right;">143.80</td>
+<td style="text-align: right;">143.90</td>
 <td style="text-align: right;">154.00</td>
 <td style="text-align: left;">▁▆▇▃▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PSC</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.09</td>
 <td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.08</td>
 <td style="text-align: right;">0.11</td>
 <td style="text-align: right;">0.25</td>
@@ -990,21 +1061,21 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">PSC Fill</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.19</td>
 <td style="text-align: right;">0.11</td>
 <td style="text-align: right;">0.02</td>
-<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.11</td>
 <td style="text-align: right;">0.18</td>
 <td style="text-align: right;">0.26</td>
 <td style="text-align: right;">0.62</td>
-<td style="text-align: left;">▇▇▃▁▁</td>
+<td style="text-align: left;">▆▇▃▁▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PSC CO2</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.04</td>
 <td style="text-align: right;">0.00</td>
@@ -1017,7 +1088,7 @@ Loading required package: parallel</code></pre>
 <tr class="odd">
 <td style="text-align: left;">Mnf Flow</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">21.03</td>
 <td style="text-align: right;">117.76</td>
 <td style="text-align: right;">-100.20</td>
@@ -1029,12 +1100,12 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Carb Pressure1</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">123.04</td>
-<td style="text-align: right;">4.42</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">122.98</td>
+<td style="text-align: right;">4.44</td>
 <td style="text-align: right;">113.00</td>
-<td style="text-align: right;">120.20</td>
+<td style="text-align: right;">119.90</td>
 <td style="text-align: right;">123.40</td>
 <td style="text-align: right;">125.50</td>
 <td style="text-align: right;">136.00</td>
@@ -1042,10 +1113,10 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fill Pressure</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">48.14</td>
-<td style="text-align: right;">3.44</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">48.16</td>
+<td style="text-align: right;">3.54</td>
 <td style="text-align: right;">37.80</td>
 <td style="text-align: right;">46.00</td>
 <td style="text-align: right;">47.80</td>
@@ -1056,7 +1127,7 @@ Loading required package: parallel</code></pre>
 <tr class="even">
 <td style="text-align: left;">Hyd Pressure1</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">12.01</td>
 <td style="text-align: right;">13.53</td>
 <td style="text-align: right;">-50.00</td>
@@ -1068,10 +1139,10 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Hyd Pressure2</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">20.11</td>
-<td style="text-align: right;">17.21</td>
+<td style="text-align: right;">20.04</td>
+<td style="text-align: right;">17.23</td>
 <td style="text-align: right;">-50.00</td>
 <td style="text-align: right;">0.00</td>
 <td style="text-align: right;">26.80</td>
@@ -1081,62 +1152,62 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Hyd Pressure3</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">19.61</td>
-<td style="text-align: right;">16.56</td>
+<td style="text-align: right;">19.54</td>
+<td style="text-align: right;">16.57</td>
 <td style="text-align: right;">-50.00</td>
 <td style="text-align: right;">0.00</td>
-<td style="text-align: right;">27.70</td>
+<td style="text-align: right;">27.60</td>
 <td style="text-align: right;">33.00</td>
 <td style="text-align: right;">49.20</td>
 <td style="text-align: left;">▁▁▆▃▇</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Hyd Pressure4</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">97.84</td>
-<td style="text-align: right;">13.92</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">98.24</td>
+<td style="text-align: right;">14.20</td>
 <td style="text-align: right;">68.00</td>
 <td style="text-align: right;">90.00</td>
 <td style="text-align: right;">98.00</td>
 <td style="text-align: right;">104.00</td>
 <td style="text-align: right;">140.00</td>
-<td style="text-align: left;">▅▆▇▂▁</td>
+<td style="text-align: left;">▅▆▇▃▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Filler Level</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">110.29</td>
-<td style="text-align: right;">15.50</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">110.14</td>
+<td style="text-align: right;">15.64</td>
 <td style="text-align: right;">69.20</td>
 <td style="text-align: right;">100.60</td>
-<td style="text-align: right;">118.60</td>
+<td style="text-align: right;">118.40</td>
 <td style="text-align: right;">120.20</td>
 <td style="text-align: right;">153.20</td>
 <td style="text-align: left;">▂▃▇▇▁</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Filler Speed</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">0.96</td>
-<td style="text-align: right;">3581.39</td>
-<td style="text-align: right;">911.19</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3511.25</td>
+<td style="text-align: right;">977.16</td>
 <td style="text-align: right;">1006.00</td>
-<td style="text-align: right;">3812.00</td>
-<td style="text-align: right;">3978.00</td>
+<td style="text-align: right;">3795.00</td>
+<td style="text-align: right;">3918.00</td>
 <td style="text-align: right;">3996.00</td>
 <td style="text-align: right;">4020.00</td>
-<td style="text-align: left;">▁▁▁▁▇</td>
+<td style="text-align: left;">▂▁▁▁▇</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Temperature</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">66.23</td>
-<td style="text-align: right;">1.69</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">66.24</td>
+<td style="text-align: right;">1.70</td>
 <td style="text-align: right;">63.80</td>
 <td style="text-align: right;">65.40</td>
 <td style="text-align: right;">65.80</td>
@@ -1146,21 +1217,21 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Usage cont</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">20.90</td>
-<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">20.88</td>
+<td style="text-align: right;">3.02</td>
 <td style="text-align: right;">12.90</td>
-<td style="text-align: right;">18.12</td>
+<td style="text-align: right;">18.10</td>
 <td style="text-align: right;">21.44</td>
 <td style="text-align: right;">23.74</td>
 <td style="text-align: right;">24.60</td>
-<td style="text-align: left;">▁▃▃▃▇</td>
+<td style="text-align: left;">▁▂▃▃▇</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Carb Flow</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">2408.64</td>
 <td style="text-align: right;">1161.36</td>
 <td style="text-align: right;">0.00</td>
@@ -1172,8 +1243,8 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Density</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
 <td style="text-align: right;">1.18</td>
 <td style="text-align: right;">0.38</td>
 <td style="text-align: right;">0.06</td>
@@ -1185,23 +1256,23 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">MFR</td>
-<td style="text-align: right;">31</td>
-<td style="text-align: right;">0.88</td>
-<td style="text-align: right;">697.80</td>
-<td style="text-align: right;">96.40</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">652.71</td>
+<td style="text-align: right;">168.27</td>
 <td style="text-align: right;">15.60</td>
-<td style="text-align: right;">707.00</td>
-<td style="text-align: right;">724.60</td>
-<td style="text-align: right;">731.45</td>
+<td style="text-align: right;">687.20</td>
+<td style="text-align: right;">720.40</td>
+<td style="text-align: right;">730.70</td>
 <td style="text-align: right;">784.80</td>
 <td style="text-align: left;">▁▁▁▁▇</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Balling</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
 <td style="text-align: right;">2.20</td>
-<td style="text-align: right;">0.92</td>
+<td style="text-align: right;">0.93</td>
 <td style="text-align: right;">0.90</td>
 <td style="text-align: right;">1.50</td>
 <td style="text-align: right;">1.65</td>
@@ -1211,9 +1282,9 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Pressure Vacuum</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">-5.17</td>
+<td style="text-align: right;">-5.18</td>
 <td style="text-align: right;">0.58</td>
 <td style="text-align: right;">-6.40</td>
 <td style="text-align: right;">-5.60</td>
@@ -1224,47 +1295,47 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Oxygen Filler</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.00</td>
 <td style="text-align: right;">0.02</td>
 <td style="text-align: right;">0.03</td>
-<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.06</td>
 <td style="text-align: right;">0.40</td>
 <td style="text-align: left;">▇▁▁▁▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Bowl Setpoint</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">109.62</td>
-<td style="text-align: right;">15.02</td>
+<td style="text-align: right;">109.51</td>
+<td style="text-align: right;">15.10</td>
 <td style="text-align: right;">70.00</td>
 <td style="text-align: right;">100.00</td>
 <td style="text-align: right;">120.00</td>
 <td style="text-align: right;">120.00</td>
 <td style="text-align: right;">130.00</td>
-<td style="text-align: left;">▁▂▁▃▇</td>
+<td style="text-align: left;">▂▂▁▃▇</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Pressure Setpoint</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">47.73</td>
-<td style="text-align: right;">2.06</td>
+<td style="text-align: right;">2.07</td>
 <td style="text-align: right;">44.00</td>
 <td style="text-align: right;">46.00</td>
 <td style="text-align: right;">46.00</td>
 <td style="text-align: right;">50.00</td>
 <td style="text-align: right;">52.00</td>
-<td style="text-align: left;">▁▇▁▆▁</td>
+<td style="text-align: left;">▁▇▁▇▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Air Pressurer</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1.00</td>
 <td style="text-align: right;">142.83</td>
 <td style="text-align: right;">1.23</td>
 <td style="text-align: right;">141.20</td>
@@ -1276,9 +1347,9 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Alch Rel</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0.99</td>
-<td style="text-align: right;">6.91</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.90</td>
 <td style="text-align: right;">0.50</td>
 <td style="text-align: right;">6.40</td>
 <td style="text-align: right;">6.54</td>
@@ -1289,8 +1360,8 @@ Loading required package: parallel</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Carb Rel</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">5.44</td>
 <td style="text-align: right;">0.13</td>
 <td style="text-align: right;">5.18</td>
@@ -1298,12 +1369,12 @@ Loading required package: parallel</code></pre>
 <td style="text-align: right;">5.40</td>
 <td style="text-align: right;">5.56</td>
 <td style="text-align: right;">5.74</td>
-<td style="text-align: left;">▂▇▂▃▂</td>
+<td style="text-align: left;">▂▇▃▃▂</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Balling Lvl</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">2.05</td>
 <td style="text-align: right;">0.88</td>
 <td style="text-align: right;">0.00</td>
@@ -1319,76 +1390,61 @@ Loading required package: parallel</code></pre>
 </div>
 <p>Below, we will perform exploratory data analysis (EDA) to understand the dataset better. We will summarize the data, visualize distributions, and check for missing values. We will also explore relationships between predictors and the response variable (pH).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(StudentData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(StudentData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  Brand Code         Carb Volume     Fill Ounces      PC Volume      
- Length:2571        Min.   :5.040   Min.   :23.63   Min.   :0.07933  
- Class :character   1st Qu.:5.293   1st Qu.:23.92   1st Qu.:0.23917  
- Mode  :character   Median :5.347   Median :23.97   Median :0.27133  
-                    Mean   :5.370   Mean   :23.97   Mean   :0.27712  
-                    3rd Qu.:5.453   3rd Qu.:24.03   3rd Qu.:0.31200  
-                    Max.   :5.700   Max.   :24.32   Max.   :0.47800  
-                    NA's   :10      NA's   :38      NA's   :39       
- Carb Pressure     Carb Temp          PSC             PSC Fill     
- Min.   :57.00   Min.   :128.6   Min.   :0.00200   Min.   :0.0000  
- 1st Qu.:65.60   1st Qu.:138.4   1st Qu.:0.04800   1st Qu.:0.1000  
- Median :68.20   Median :140.8   Median :0.07600   Median :0.1800  
- Mean   :68.19   Mean   :141.1   Mean   :0.08457   Mean   :0.1954  
- 3rd Qu.:70.60   3rd Qu.:143.8   3rd Qu.:0.11200   3rd Qu.:0.2600  
- Max.   :79.40   Max.   :154.0   Max.   :0.27000   Max.   :0.6200  
- NA's   :27      NA's   :26      NA's   :33        NA's   :23      
-    PSC CO2           Mnf Flow       Carb Pressure1  Fill Pressure  
- Min.   :0.00000   Min.   :-100.20   Min.   :105.6   Min.   :34.60  
- 1st Qu.:0.02000   1st Qu.:-100.00   1st Qu.:119.0   1st Qu.:46.00  
- Median :0.04000   Median :  65.20   Median :123.2   Median :46.40  
- Mean   :0.05641   Mean   :  24.57   Mean   :122.6   Mean   :47.92  
- 3rd Qu.:0.08000   3rd Qu.: 140.80   3rd Qu.:125.4   3rd Qu.:50.00  
- Max.   :0.24000   Max.   : 229.40   Max.   :140.2   Max.   :60.40  
- NA's   :39        NA's   :2         NA's   :32      NA's   :22     
- Hyd Pressure1   Hyd Pressure2   Hyd Pressure3   Hyd Pressure4   
- Min.   :-0.80   Min.   : 0.00   Min.   :-1.20   Min.   : 52.00  
- 1st Qu.: 0.00   1st Qu.: 0.00   1st Qu.: 0.00   1st Qu.: 86.00  
- Median :11.40   Median :28.60   Median :27.60   Median : 96.00  
- Mean   :12.44   Mean   :20.96   Mean   :20.46   Mean   : 96.29  
- 3rd Qu.:20.20   3rd Qu.:34.60   3rd Qu.:33.40   3rd Qu.:102.00  
- Max.   :58.00   Max.   :59.40   Max.   :50.00   Max.   :142.00  
- NA's   :11      NA's   :15      NA's   :15      NA's   :30      
-  Filler Level    Filler Speed   Temperature      Usage cont      Carb Flow   
- Min.   : 55.8   Min.   : 998   Min.   :63.60   Min.   :12.08   Min.   :  26  
- 1st Qu.: 98.3   1st Qu.:3888   1st Qu.:65.20   1st Qu.:18.36   1st Qu.:1144  
- Median :118.4   Median :3982   Median :65.60   Median :21.79   Median :3028  
- Mean   :109.3   Mean   :3687   Mean   :65.97   Mean   :20.99   Mean   :2468  
- 3rd Qu.:120.0   3rd Qu.:3998   3rd Qu.:66.40   3rd Qu.:23.75   3rd Qu.:3186  
- Max.   :161.2   Max.   :4030   Max.   :76.20   Max.   :25.90   Max.   :5104  
- NA's   :20      NA's   :57     NA's   :14      NA's   :5       NA's   :2     
-    Density           MFR           Balling       Pressure Vacuum 
- Min.   :0.240   Min.   : 31.4   Min.   :-0.170   Min.   :-6.600  
- 1st Qu.:0.900   1st Qu.:706.3   1st Qu.: 1.496   1st Qu.:-5.600  
- Median :0.980   Median :724.0   Median : 1.648   Median :-5.400  
- Mean   :1.174   Mean   :704.0   Mean   : 2.198   Mean   :-5.216  
- 3rd Qu.:1.620   3rd Qu.:731.0   3rd Qu.: 3.292   3rd Qu.:-5.000  
- Max.   :1.920   Max.   :868.6   Max.   : 4.012   Max.   :-3.600  
- NA's   :1       NA's   :212     NA's   :1                        
-       PH        Oxygen Filler     Bowl Setpoint   Pressure Setpoint
- Min.   :7.880   Min.   :0.00240   Min.   : 70.0   Min.   :44.00    
- 1st Qu.:8.440   1st Qu.:0.02200   1st Qu.:100.0   1st Qu.:46.00    
- Median :8.540   Median :0.03340   Median :120.0   Median :46.00    
- Mean   :8.546   Mean   :0.04684   Mean   :109.3   Mean   :47.62    
- 3rd Qu.:8.680   3rd Qu.:0.06000   3rd Qu.:120.0   3rd Qu.:50.00    
- Max.   :9.360   Max.   :0.40000   Max.   :140.0   Max.   :52.00    
- NA's   :4       NA's   :12        NA's   :2       NA's   :12       
- Air Pressurer      Alch Rel        Carb Rel      Balling Lvl  
- Min.   :140.8   Min.   :5.280   Min.   :4.960   Min.   :0.00  
- 1st Qu.:142.2   1st Qu.:6.540   1st Qu.:5.340   1st Qu.:1.38  
- Median :142.6   Median :6.560   Median :5.400   Median :1.48  
- Mean   :142.8   Mean   :6.897   Mean   :5.437   Mean   :2.05  
- 3rd Qu.:143.0   3rd Qu.:7.240   3rd Qu.:5.540   3rd Qu.:3.14  
- Max.   :148.2   Max.   :8.620   Max.   :6.060   Max.   :3.66  
-                 NA's   :9       NA's   :10      NA's   :1     </code></pre>
+<pre><code>  Carb Volume     Fill Ounces      PC Volume       Carb Pressure  
+ Min.   :5.040   Min.   :23.63   Min.   :0.08667   Min.   :57.00  
+ 1st Qu.:5.293   1st Qu.:23.92   1st Qu.:0.23933   1st Qu.:65.80  
+ Median :5.347   Median :23.97   Median :0.27133   Median :68.20  
+ Mean   :5.374   Mean   :23.97   Mean   :0.27707   Mean   :68.31  
+ 3rd Qu.:5.460   3rd Qu.:24.03   3rd Qu.:0.31100   3rd Qu.:70.60  
+ Max.   :5.700   Max.   :24.32   Max.   :0.47067   Max.   :79.40  
+   Carb Temp          PSC             PSC Fill         PSC CO2      
+ Min.   :128.6   Min.   :0.00200   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:138.4   1st Qu.:0.04800   1st Qu.:0.1000   1st Qu.:0.0200  
+ Median :140.8   Median :0.07800   Median :0.1800   Median :0.0400  
+ Mean   :141.2   Mean   :0.08463   Mean   :0.1962   Mean   :0.0566  
+ 3rd Qu.:143.8   3rd Qu.:0.11200   3rd Qu.:0.2600   3rd Qu.:0.0800  
+ Max.   :154.0   Max.   :0.27000   Max.   :0.6200   Max.   :0.2400  
+    Mnf Flow       Carb Pressure1  Fill Pressure   Hyd Pressure3  
+ Min.   :-100.20   Min.   :105.6   Min.   :34.60   Min.   :-1.20  
+ 1st Qu.:-100.00   1st Qu.:118.8   1st Qu.:46.00   1st Qu.: 0.00  
+ Median :  65.20   Median :123.2   Median :46.40   Median :27.40  
+ Mean   :  24.45   Mean   :122.5   Mean   :47.88   Mean   :20.44  
+ 3rd Qu.: 141.20   3rd Qu.:125.4   3rd Qu.:50.00   3rd Qu.:33.20  
+ Max.   : 216.20   Max.   :140.2   Max.   :60.40   Max.   :50.00  
+  Filler Speed   Temperature      Usage cont       Density     
+ Min.   : 998   Min.   :63.60   Min.   :12.08   Min.   :0.240  
+ 1st Qu.:3866   1st Qu.:65.20   1st Qu.:18.39   1st Qu.:0.900  
+ Median :3982   Median :65.60   Median :21.80   Median :0.980  
+ Mean   :3643   Mean   :65.92   Mean   :21.00   Mean   :1.184  
+ 3rd Qu.:3998   3rd Qu.:66.40   3rd Qu.:23.76   3rd Qu.:1.640  
+ Max.   :4030   Max.   :76.20   Max.   :25.90   Max.   :1.920  
+    Balling       Pressure Vacuum       PH        Oxygen Filler    
+ Min.   :-0.170   Min.   :-6.60   Min.   :7.880   Min.   :0.00240  
+ 1st Qu.: 1.496   1st Qu.:-5.60   1st Qu.:8.440   1st Qu.:0.02200  
+ Median : 1.648   Median :-5.40   Median :8.540   Median :0.03340  
+ Mean   : 2.223   Mean   :-5.21   Mean   :8.548   Mean   :0.04692  
+ 3rd Qu.: 3.340   3rd Qu.:-5.00   3rd Qu.:8.680   3rd Qu.:0.06000  
+ Max.   : 4.012   Max.   :-3.60   Max.   :9.360   Max.   :0.40000  
+ Bowl Setpoint   Pressure Setpoint    Alch Rel        Carb Rel    
+ Min.   : 70.0   Min.   :44.0      Min.   :6.240   Min.   :4.960  
+ 1st Qu.:100.0   1st Qu.:46.0      1st Qu.:6.540   1st Qu.:5.340  
+ Median :120.0   Median :46.0      Median :6.580   Median :5.400  
+ Mean   :109.2   Mean   :47.6      Mean   :6.909   Mean   :5.441  
+ 3rd Qu.:120.0   3rd Qu.:50.0      3rd Qu.:7.620   3rd Qu.:5.560  
+ Max.   :140.0   Max.   :52.0      Max.   :8.560   Max.   :6.060  
+  Balling Lvl   
+ Min.   :0.000  
+ 1st Qu.:1.380  
+ Median :1.480  
+ Mean   :2.078  
+ 3rd Qu.:3.160  
+ Max.   :3.660  </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_histogram</span>(StudentData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_histogram</span>(StudentData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1403,30 +1459,18 @@ Loading required package: parallel</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize missing data</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>StudentData <span class="sc">|&gt;</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)))) <span class="sc">|&gt;</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(value <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(value))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize missing data</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>StudentData <span class="sc">|&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)))) <span class="sc">|&gt;</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(value <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(value))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 31 × 2
-   name           value
-   &lt;chr&gt;          &lt;int&gt;
- 1 MFR              212
- 2 Brand Code       120
- 3 Filler Speed      57
- 4 PC Volume         39
- 5 PSC CO2           39
- 6 Fill Ounces       38
- 7 PSC               33
- 8 Carb Pressure1    32
- 9 Hyd Pressure4     30
-10 Carb Pressure     27
-# ℹ 21 more rows</code></pre>
+<pre><code># A tibble: 0 × 2
+# ℹ 2 variables: name &lt;chr&gt;, value &lt;int&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot missing data</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing</span>(StudentData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot missing data</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing</span>(StudentData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1434,17 +1478,17 @@ Loading required package: parallel</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation matrix</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>correlation_matrix <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    correlation_matrix,</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="st">"hclust"</span>,</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># addCoef.col = "grey",</span></span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># addCoefasPercent = TRUE,</span></span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">tl.cex =</span> <span class="fl">0.7</span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation matrix</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>correlation_matrix <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    correlation_matrix,</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="st">"hclust"</span>,</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># addCoef.col = "grey",</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># addCoefasPercent = TRUE,</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">tl.cex =</span> <span class="fl">0.7</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1452,14 +1496,14 @@ Loading required package: parallel</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Feature plot</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">featurePlot</span>(</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> StudentData <span class="sc">|&gt;</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(<span class="sc">-</span>PH),</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> StudentData<span class="sc">$</span>PH,</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> <span class="st">"scatter"</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Feature plot</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">featurePlot</span>(</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> StudentData <span class="sc">|&gt;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(<span class="sc">-</span>PH),</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> StudentData<span class="sc">$</span>PH,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> <span class="st">"scatter"</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1487,17 +1531,6 @@ Loading required package: parallel</code></pre>
 </ul></li>
 </ol>
 </section>
-<section id="clean-and-tidy-data" class="level2">
-<h2 class="anchored" data-anchor-id="clean-and-tidy-data">Clean and Tidy Data</h2>
-<p>Mutate variable types (e.g., convert character column <code>Brand Code</code> to factor, numeric, etc., so we can use this to forecast data).</p>
-<p>Browse and remove outliers if necessary.</p>
-<p>Impute and transform if necessary.</p>
-<ul>
-<li><p>Andreina to impute</p></li>
-<li><p>Adreina to check correlation, remove features that have correlation over some threshold</p></li>
-<li><p>Remove near zero variance predictors with <code>nearZeroVar()</code>.</p></li>
-</ul>
-</section>
 <section id="forecast" class="level2">
 <h2 class="anchored" data-anchor-id="forecast">Forecast</h2>
 <p>We will try the following models:</p>
@@ -1521,492 +1554,483 @@ Loading required package: parallel</code></pre>
 <p>Since the data is relatively large, we will avoid heavy models like neural networks, support vector machines (SVM), or boosted trees. Since we have a lot of predictors, we opt for models that handle feature selection or dimensionality reduction like elastic net, PLS, and tree-based models. We also want model results to be easy to interpret for our non-technical report, so we focus on elastic net, MARS, and single/model trees.</p>
 <p>Also, because the data is relatively large, we can afford to use a training and a test set. We also center and scale the data to ensure that all predictors are on the same scale, which is important for models like PLS and elastic net.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!--NB to DELETE this line after imputation section is completed--&gt;</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span> <span class="fu">drop_na</span>()</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into a training and a test set</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>trainingRows <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    StudentData<span class="sc">$</span>PH,</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> .<span class="dv">80</span>,</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">list =</span> <span class="cn">FALSE</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>StudentData_train <span class="ot">&lt;-</span> StudentData[trainingRows, ]</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>StudentData_test <span class="ot">&lt;-</span> StudentData[<span class="sc">-</span>trainingRows, ]</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save training and test predictors and response variables</span></span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>StudentData_train_x <span class="ot">&lt;-</span> StudentData_train[, <span class="sc">!</span><span class="fu">names</span>(StudentData_train) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>StudentData_train_y <span class="ot">&lt;-</span> StudentData_train<span class="sc">$</span>PH</span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>StudentData_test_x <span class="ot">&lt;-</span> StudentData_test[, <span class="sc">!</span><span class="fu">names</span>(StudentData_test) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>StudentData_test_y <span class="ot">&lt;-</span> StudentData_test<span class="sc">$</span>PH</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!--NB to DELETE this line after imputation section is completed--&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>StudentData <span class="ot">&lt;-</span> StudentData <span class="sc">|&gt;</span> <span class="fu">drop_na</span>()</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into a training and a test set</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>trainingRows <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    StudentData<span class="sc">$</span>PH,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> .<span class="dv">80</span>,</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">list =</span> <span class="cn">FALSE</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>StudentData_train <span class="ot">&lt;-</span> StudentData[trainingRows, ]</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>StudentData_test <span class="ot">&lt;-</span> StudentData[<span class="sc">-</span>trainingRows, ]</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save training and test predictors and response variables</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>StudentData_train_x <span class="ot">&lt;-</span> StudentData_train[, <span class="sc">!</span><span class="fu">names</span>(StudentData_train) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>StudentData_train_y <span class="ot">&lt;-</span> StudentData_train<span class="sc">$</span>PH</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>StudentData_test_x <span class="ot">&lt;-</span> StudentData_test[, <span class="sc">!</span><span class="fu">names</span>(StudentData_test) <span class="sc">%in%</span> <span class="st">"PH"</span>]</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>StudentData_test_y <span class="ot">&lt;-</span> StudentData_test<span class="sc">$</span>PH</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Fitting models to the training data below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pre-process the data and tune a PLS model</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>ctrl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>plsTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"pls"</span>,</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">20</span>,</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> ctrl,</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">preProc =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>)</span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Setting row names on a tibble is deprecated.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>plsTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pre-process the data and tune a PLS model</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>ctrl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>plsTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"pls"</span>,</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">20</span>,</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> ctrl,</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">preProc =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>)</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>plsTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Partial Least Squares 
 
-1631 samples
-  32 predictor
+1962 samples
+  24 predictor
 
-Pre-processing: centered (31), scaled (31), ignore (1) 
+Pre-processing: centered (24), scaled (24) 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 1467, 1469, 1469, 1467, 1468, 1468, ... 
+Summary of sample sizes: 1766, 1766, 1765, 1765, 1765, 1767, ... 
 Resampling results across tuning parameters:
 
-  ncomp  RMSE       Rsquared   MAE       
-   1     0.1488582  0.2312502  0.11802022
-   2     0.1403490  0.3151460  0.10925305
-   3     0.1372490  0.3440205  0.10791799
-   4     0.1344702  0.3705490  0.10379107
-   5     0.1318583  0.3942403  0.10276366
-   6     0.1305447  0.4066477  0.10198990
-   7     0.1299001  0.4123502  0.10135662
-   8     0.1297131  0.4143680  0.10131623
-   9     0.1293449  0.4178913  0.10088115
-  10     0.1293386  0.4180088  0.10075248
-  11     0.1290863  0.4205050  0.10054825
-  12     0.1290656  0.4208149  0.10049633
-  13     0.1290394  0.4210244  0.10044179
-  14     0.1289513  0.4218954  0.10024119
-  15     0.1287685  0.4236308  0.09993350
-  16     0.1285894  0.4253852  0.09982035
-  17     0.1285303  0.4258924  0.09961838
-  18     0.1284027  0.4271440  0.09970902
-  19     0.1283007  0.4282049  0.09965762
-  20     0.1281120  0.4299008  0.09955418
+  ncomp  RMSE       Rsquared   MAE      
+   1     0.1526797  0.2079136  0.1218203
+   2     0.1471535  0.2643367  0.1159609
+   3     0.1432137  0.3034941  0.1124250
+   4     0.1412104  0.3226412  0.1107318
+   5     0.1400134  0.3350179  0.1090715
+   6     0.1394261  0.3404217  0.1084824
+   7     0.1392301  0.3424078  0.1080465
+   8     0.1390773  0.3438246  0.1077497
+   9     0.1390288  0.3443471  0.1075500
+  10     0.1388862  0.3457525  0.1074372
+  11     0.1389129  0.3454862  0.1074918
+  12     0.1389022  0.3456613  0.1074216
+  13     0.1388885  0.3456497  0.1074181
+  14     0.1388843  0.3456261  0.1073457
+  15     0.1388608  0.3458722  0.1074054
+  16     0.1388164  0.3462472  0.1073657
+  17     0.1388035  0.3463532  0.1073653
+  18     0.1388021  0.3463435  0.1073626
+  19     0.1387940  0.3464281  0.1073501
+  20     0.1387949  0.3464369  0.1073789
 
 RMSE was used to select the optimal model using the smallest value.
-The final value used for the model was ncomp = 20.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>plsPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    plsTune,</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!--NB to DELETE this line after data cleaning section is completed and variable types are changed to numeric--&gt;</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>StudentData_train_x <span class="ot">&lt;-</span> StudentData_train_x[, <span class="fu">sapply</span>(</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    is.numeric</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>)]</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>enetGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">.lambda =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.01</span>, .<span class="dv">1</span>),</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fraction =</span> <span class="fu">seq</span>(.<span class="dv">05</span>, <span class="dv">1</span>, <span class="at">length =</span> <span class="dv">20</span>)</span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>enetTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"enet"</span>,</span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> enetGrid,</span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> ctrl,</span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">preProc =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>)</span>
-<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>enetTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Elasticnet 
-
-1631 samples
-  31 predictor
-
-Pre-processing: centered (31), scaled (31) 
-Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 1468, 1467, 1468, 1469, 1467, 1468, ... 
-Resampling results across tuning parameters:
-
-  lambda  fraction  RMSE       Rsquared   MAE      
-  0.00    0.05      0.1544718  0.2149958  0.1230890
-  0.00    0.10      0.1467786  0.2771951  0.1162944
-  0.00    0.15      0.1426109  0.3031205  0.1124957
-  0.00    0.20      0.1405586  0.3188817  0.1104148
-  0.00    0.25      0.1390096  0.3325521  0.1086515
-  0.00    0.30      0.1377715  0.3436377  0.1072205
-  0.00    0.35      0.1369665  0.3503563  0.1060774
-  0.00    0.40      0.1364387  0.3548427  0.1052549
-  0.00    0.45      0.1361471  0.3573542  0.1048917
-  0.00    0.50      0.1359297  0.3593457  0.1046464
-  0.00    0.55      0.1358343  0.3601857  0.1045007
-  0.00    0.60      0.1358063  0.3606743  0.1044229
-  0.00    0.65      0.1357704  0.3610418  0.1043340
-  0.00    0.70      0.1357506  0.3612453  0.1042665
-  0.00    0.75      0.1357407  0.3613728  0.1041949
-  0.00    0.80      0.1357318  0.3614907  0.1041135
-  0.00    0.85      0.1357324  0.3615253  0.1040391
-  0.00    0.90      0.1357428  0.3614858  0.1039702
-  0.00    0.95      0.1357528  0.3614637  0.1038979
-  0.00    1.00      0.1357729  0.3613638  0.1038332
-  0.01    0.05      0.1582099  0.2084336  0.1266428
-  0.01    0.10      0.1516715  0.2431841  0.1206247
-  0.01    0.15      0.1469865  0.2759747  0.1164877
-  0.01    0.20      0.1438545  0.2937315  0.1136494
-  0.01    0.25      0.1418432  0.3083822  0.1117560
-  0.01    0.30      0.1406711  0.3175804  0.1105375
-  0.01    0.35      0.1396099  0.3268703  0.1093613
-  0.01    0.40      0.1387222  0.3348994  0.1083281
-  0.01    0.45      0.1379139  0.3421496  0.1073939
-  0.01    0.50      0.1373056  0.3473244  0.1065829
-  0.01    0.55      0.1368665  0.3510157  0.1059122
-  0.01    0.60      0.1365376  0.3538737  0.1054231
-  0.01    0.65      0.1362926  0.3560433  0.1051370
-  0.01    0.70      0.1361252  0.3575358  0.1049420
-  0.01    0.75      0.1359769  0.3588815  0.1047614
-  0.01    0.80      0.1358924  0.3596635  0.1046280
-  0.01    0.85      0.1359101  0.3596421  0.1046001
-  0.01    0.90      0.1359050  0.3597513  0.1045436
-  0.01    0.95      0.1358924  0.3598888  0.1044772
-  0.01    1.00      0.1358679  0.3601379  0.1044057
-  0.10    0.05      0.1612019  0.2084336  0.1293915
-  0.10    0.10      0.1554110  0.2122004  0.1240415
-  0.10    0.15      0.1514432  0.2455529  0.1204324
-  0.10    0.20      0.1480993  0.2681763  0.1175007
-  0.10    0.25      0.1454911  0.2831429  0.1151731
-  0.10    0.30      0.1436141  0.2932520  0.1134676
-  0.10    0.35      0.1423316  0.3020636  0.1122562
-  0.10    0.40      0.1412856  0.3102979  0.1112060
-  0.10    0.45      0.1406064  0.3155423  0.1105166
-  0.10    0.50      0.1400591  0.3203704  0.1098880
-  0.10    0.55      0.1394972  0.3255799  0.1092119
-  0.10    0.60      0.1389132  0.3311006  0.1085306
-  0.10    0.65      0.1384089  0.3358214  0.1079114
-  0.10    0.70      0.1380362  0.3392911  0.1074006
-  0.10    0.75      0.1377200  0.3422602  0.1069867
-  0.10    0.80      0.1374268  0.3450740  0.1066320
-  0.10    0.85      0.1371968  0.3473662  0.1063640
-  0.10    0.90      0.1370358  0.3490309  0.1061782
-  0.10    0.95      0.1369242  0.3502551  0.1060505
-  0.10    1.00      0.1368599  0.3510408  0.1059540
-
-RMSE was used to select the optimal model using the smallest value.
-The final values used for the model were fraction = 0.8 and lambda = 0.</code></pre>
+The final value used for the model was ncomp = 19.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>enetPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    enetTune,</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>plsPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    plsTune,</span>
 <span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
 <span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>knnTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"knn"</span>,</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">preProc =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>),</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">10</span></span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>knnTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>enetGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">.lambda =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.01</span>, .<span class="dv">1</span>),</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fraction =</span> <span class="fu">seq</span>(.<span class="dv">05</span>, <span class="dv">1</span>, <span class="at">length =</span> <span class="dv">20</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>enetTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"enet"</span>,</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> enetGrid,</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> ctrl,</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">preProc =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>)</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>enetTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>k-Nearest Neighbors 
+<pre><code>Elasticnet 
 
-1631 samples
-  31 predictor
+1962 samples
+  24 predictor
 
-Pre-processing: centered (31), scaled (31) 
-Resampling: Bootstrapped (25 reps) 
-Summary of sample sizes: 1631, 1631, 1631, 1631, 1631, 1631, ... 
+Pre-processing: centered (24), scaled (24) 
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 1766, 1765, 1766, 1765, 1766, 1766, ... 
 Resampling results across tuning parameters:
 
-  k   RMSE       Rsquared   MAE       
-   5  0.1315518  0.4277552  0.09476926
-   7  0.1289443  0.4416956  0.09411419
-   9  0.1283847  0.4443694  0.09457960
-  11  0.1284035  0.4432301  0.09536790
-  13  0.1285859  0.4418627  0.09596556
-  15  0.1289453  0.4387390  0.09660949
-  17  0.1295149  0.4339626  0.09738143
-  19  0.1299825  0.4298868  0.09796850
-  21  0.1304398  0.4259026  0.09850425
-  23  0.1309664  0.4215519  0.09907507
+  lambda  fraction  RMSE       Rsquared   MAE      
+  0.00    0.05      0.1601345  0.2011441  0.1284125
+  0.00    0.10      0.1540732  0.2304001  0.1228536
+  0.00    0.15      0.1498289  0.2590501  0.1191415
+  0.00    0.20      0.1468450  0.2838702  0.1165682
+  0.00    0.25      0.1448653  0.2972581  0.1147845
+  0.00    0.30      0.1435667  0.3077049  0.1135107
+  0.00    0.35      0.1425359  0.3161448  0.1123879
+  0.00    0.40      0.1417207  0.3234398  0.1114343
+  0.00    0.45      0.1409846  0.3301680  0.1105673
+  0.00    0.50      0.1403838  0.3354294  0.1098225
+  0.00    0.55      0.1398682  0.3399829  0.1092024
+  0.00    0.60      0.1394399  0.3436469  0.1086864
+  0.00    0.65      0.1391420  0.3460973  0.1083083
+  0.00    0.70      0.1389659  0.3474658  0.1080736
+  0.00    0.75      0.1388727  0.3482473  0.1078942
+  0.00    0.80      0.1388056  0.3488704  0.1077619
+  0.00    0.85      0.1387864  0.3490144  0.1077112
+  0.00    0.90      0.1387763  0.3491760  0.1076575
+  0.00    0.95      0.1387886  0.3491727  0.1076234
+  0.00    1.00      0.1388106  0.3490656  0.1076050
+  0.01    0.05      0.1617007  0.2011441  0.1298980
+  0.01    0.10      0.1559350  0.2149989  0.1245400
+  0.01    0.15      0.1518210  0.2469449  0.1209467
+  0.01    0.20      0.1488597  0.2667107  0.1183130
+  0.01    0.25      0.1465223  0.2860583  0.1162839
+  0.01    0.30      0.1449236  0.2966215  0.1148444
+  0.01    0.35      0.1438352  0.3051499  0.1137895
+  0.01    0.40      0.1428989  0.3128900  0.1128085
+  0.01    0.45      0.1421794  0.3190104  0.1119786
+  0.01    0.50      0.1415173  0.3251614  0.1112250
+  0.01    0.55      0.1409323  0.3304411  0.1105405
+  0.01    0.60      0.1404313  0.3349041  0.1099482
+  0.01    0.65      0.1399883  0.3388411  0.1094341
+  0.01    0.70      0.1396048  0.3421459  0.1089730
+  0.01    0.75      0.1393141  0.3445714  0.1085895
+  0.01    0.80      0.1391150  0.3461814  0.1083140
+  0.01    0.85      0.1389928  0.3471577  0.1081191
+  0.01    0.90      0.1389196  0.3478156  0.1079606
+  0.01    0.95      0.1388722  0.3482623  0.1078498
+  0.01    1.00      0.1388606  0.3484105  0.1077897
+  0.10    0.05      0.1638558  0.2011441  0.1318334
+  0.10    0.10      0.1585045  0.2018874  0.1269724
+  0.10    0.15      0.1550239  0.2242135  0.1236834
+  0.10    0.20      0.1519755  0.2470133  0.1211153
+  0.10    0.25      0.1496545  0.2599766  0.1190500
+  0.10    0.30      0.1478429  0.2729046  0.1174944
+  0.10    0.35      0.1462711  0.2853873  0.1161148
+  0.10    0.40      0.1451180  0.2932649  0.1150831
+  0.10    0.45      0.1442514  0.2994607  0.1142692
+  0.10    0.50      0.1435818  0.3047478  0.1135673
+  0.10    0.55      0.1429640  0.3101439  0.1129273
+  0.10    0.60      0.1424990  0.3143893  0.1123999
+  0.10    0.65      0.1420278  0.3188406  0.1119117
+  0.10    0.70      0.1415896  0.3230027  0.1114634
+  0.10    0.75      0.1411906  0.3267758  0.1110571
+  0.10    0.80      0.1408349  0.3301034  0.1106788
+  0.10    0.85      0.1405335  0.3328807  0.1103409
+  0.10    0.90      0.1402906  0.3351267  0.1100298
+  0.10    0.95      0.1401088  0.3368171  0.1097744
+  0.10    1.00      0.1399705  0.3381808  0.1095556
 
 RMSE was used to select the optimal model using the smallest value.
-The final value used for the model was k = 9.</code></pre>
+The final values used for the model were fraction = 0.9 and lambda = 0.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>knnPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    knnTune,</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>enetPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    enetTune,</span>
 <span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
 <span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>marsGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">.degree =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">.nprune =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">38</span>)</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>marsTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"earth"</span>,</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> marsGrid,</span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>)</span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>marsTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>knnTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"knn"</span>,</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">preProc =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"scale"</span>),</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">10</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>knnTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Multivariate Adaptive Regression Spline 
+<pre><code>k-Nearest Neighbors 
 
-1631 samples
-  31 predictor
+1962 samples
+  24 predictor
 
-No pre-processing
-Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 1469, 1468, 1468, 1466, 1468, 1469, ... 
+Pre-processing: centered (24), scaled (24) 
+Resampling: Bootstrapped (25 reps) 
+Summary of sample sizes: 1962, 1962, 1962, 1962, 1962, 1962, ... 
 Resampling results across tuning parameters:
 
-  degree  nprune  RMSE       Rsquared   MAE       
-  1        2      0.1505831  0.2124341  0.11812909
-  1        3      0.1451888  0.2671346  0.11303827
-  1        4      0.1431307  0.2882945  0.11109050
-  1        5      0.1406937  0.3124470  0.10845146
-  1        6      0.1397143  0.3222664  0.10816894
-  1        7      0.1372789  0.3454473  0.10545957
-  1        8      0.1363527  0.3544559  0.10443042
-  1        9      0.1341219  0.3756600  0.10308559
-  1       10      0.1328930  0.3867033  0.10154559
-  1       11      0.1326317  0.3895838  0.10099199
-  1       12      0.1317351  0.3981864  0.10012161
-  1       13      0.1311509  0.4027899  0.09969397
-  1       14      0.1309236  0.4045668  0.09925579
-  1       15      0.1306100  0.4075744  0.09909086
-  1       16      0.1309242  0.4050150  0.09936077
-  1       17      0.1308700  0.4055536  0.09931071
-  1       18      0.1308700  0.4055536  0.09931071
-  1       19      0.1308700  0.4055536  0.09931071
-  1       20      0.1308700  0.4055536  0.09931071
-  1       21      0.1308700  0.4055536  0.09931071
-  1       22      0.1308700  0.4055536  0.09931071
-  1       23      0.1308700  0.4055536  0.09931071
-  1       24      0.1308700  0.4055536  0.09931071
-  1       25      0.1308700  0.4055536  0.09931071
-  1       26      0.1308700  0.4055536  0.09931071
-  1       27      0.1308700  0.4055536  0.09931071
-  1       28      0.1308700  0.4055536  0.09931071
-  1       29      0.1308700  0.4055536  0.09931071
-  1       30      0.1308700  0.4055536  0.09931071
-  1       31      0.1308700  0.4055536  0.09931071
-  1       32      0.1308700  0.4055536  0.09931071
-  1       33      0.1308700  0.4055536  0.09931071
-  1       34      0.1308700  0.4055536  0.09931071
-  1       35      0.1308700  0.4055536  0.09931071
-  1       36      0.1308700  0.4055536  0.09931071
-  1       37      0.1308700  0.4055536  0.09931071
-  1       38      0.1308700  0.4055536  0.09931071
-  2        2      0.1510153  0.2084855  0.11834944
-  2        3      0.1457172  0.2622034  0.11392528
-  2        4      0.1444882  0.2760331  0.11321395
-  2        5      0.1414100  0.3067198  0.11090676
-  2        6      0.1388194  0.3329044  0.10778494
-  2        7      0.1369994  0.3501242  0.10707378
-  2        8      0.1365666  0.3561414  0.10567846
-  2        9      0.1350473  0.3714135  0.10401819
-  2       10      0.1344267  0.3779620  0.10316075
-  2       11      0.1332649  0.3898977  0.10211423
-  2       12      0.1328509  0.3938549  0.10139202
-  2       13      0.1313871  0.4065265  0.10001403
-  2       14      0.1312322  0.4074075  0.09939130
-  2       15      0.1304508  0.4145951  0.09878813
-  2       16      0.1285197  0.4311877  0.09709314
-  2       17      0.1282537  0.4334584  0.09686607
-  2       18      0.1286203  0.4301715  0.09699553
-  2       19      0.1276414  0.4387697  0.09603240
-  2       20      0.1272201  0.4431345  0.09552174
-  2       21      0.1270819  0.4444447  0.09537120
-  2       22      0.1268358  0.4468873  0.09516126
-  2       23      0.1258427  0.4541267  0.09428635
-  2       24      0.1255654  0.4567109  0.09409436
-  2       25      0.1248789  0.4622482  0.09380796
-  2       26      0.1247663  0.4631102  0.09367055
-  2       27      0.1244957  0.4650960  0.09337548
-  2       28      0.1246991  0.4638499  0.09352344
-  2       29      0.1247830  0.4637316  0.09370072
-  2       30      0.1245745  0.4653638  0.09353993
-  2       31      0.1246118  0.4650547  0.09358441
-  2       32      0.1245431  0.4655708  0.09352139
-  2       33      0.1246083  0.4651024  0.09348239
-  2       34      0.1246083  0.4651024  0.09348239
-  2       35      0.1246083  0.4651024  0.09348239
-  2       36      0.1246083  0.4651024  0.09348239
-  2       37      0.1246083  0.4651024  0.09348239
-  2       38      0.1246083  0.4651024  0.09348239
+  k   RMSE       Rsquared   MAE      
+   5  0.1468107  0.3140679  0.1105596
+   7  0.1422994  0.3351414  0.1081572
+   9  0.1408792  0.3401269  0.1074622
+  11  0.1400273  0.3435291  0.1071483
+  13  0.1394784  0.3461509  0.1069679
+  15  0.1390525  0.3488830  0.1067234
+  17  0.1389469  0.3490437  0.1067309
+  19  0.1392141  0.3460024  0.1068582
+  21  0.1394996  0.3428843  0.1072541
+  23  0.1396773  0.3411122  0.1076109
 
 RMSE was used to select the optimal model using the smallest value.
-The final values used for the model were nprune = 27 and degree = 2.</code></pre>
+The final value used for the model was k = 17.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>marsPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    marsTune,</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>knnPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    knnTune,</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>rpartTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rpart2"</span>,</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">10</span>,</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>)</span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>rpartTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>marsGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">.degree =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">.nprune =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">38</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>marsTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"earth"</span>,</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> marsGrid,</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>marsTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CART 
+<pre><code>Multivariate Adaptive Regression Spline 
 
-1631 samples
-  31 predictor
+1962 samples
+  24 predictor
 
 No pre-processing
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 1468, 1467, 1468, 1469, 1467, 1467, ... 
+Summary of sample sizes: 1767, 1765, 1766, 1766, 1766, 1766, ... 
 Resampling results across tuning parameters:
 
-  maxdepth  RMSE       Rsquared   MAE      
-   1        0.1531161  0.1871227  0.1207223
-   2        0.1488734  0.2308669  0.1168855
-   3        0.1434159  0.2863317  0.1125699
-   4        0.1411887  0.3091626  0.1106931
-   5        0.1399220  0.3221780  0.1092792
-   6        0.1375519  0.3451473  0.1079436
-  10        0.1355002  0.3656720  0.1055541
-  11        0.1353360  0.3682291  0.1051929
-  12        0.1355501  0.3663716  0.1049364
-  13        0.1361143  0.3632859  0.1049431
+  degree  nprune  RMSE       Rsquared   MAE       
+  1        2      0.1530554  0.2010966  0.12076882
+  1        3      0.1493903  0.2401567  0.11721014
+  1        4      0.1475967  0.2583089  0.11508385
+  1        5      0.1441135  0.2928586  0.11215113
+  1        6      0.1412196  0.3206006  0.11027152
+  1        7      0.1396786  0.3354710  0.10841210
+  1        8      0.1386492  0.3455783  0.10778889
+  1        9      0.1370632  0.3607386  0.10615270
+  1       10      0.1359082  0.3710701  0.10498734
+  1       11      0.1355545  0.3746400  0.10413011
+  1       12      0.1353180  0.3771063  0.10389014
+  1       13      0.1349824  0.3799255  0.10323187
+  1       14      0.1340983  0.3874558  0.10245107
+  1       15      0.1336277  0.3918621  0.10202642
+  1       16      0.1330648  0.3970344  0.10153581
+  1       17      0.1330605  0.3968803  0.10142027
+  1       18      0.1328444  0.3985468  0.10112598
+  1       19      0.1328576  0.3984812  0.10116027
+  1       20      0.1328576  0.3984812  0.10116027
+  1       21      0.1328576  0.3984812  0.10116027
+  1       22      0.1328576  0.3984812  0.10116027
+  1       23      0.1328576  0.3984812  0.10116027
+  1       24      0.1328576  0.3984812  0.10116027
+  1       25      0.1328576  0.3984812  0.10116027
+  1       26      0.1328576  0.3984812  0.10116027
+  1       27      0.1328576  0.3984812  0.10116027
+  1       28      0.1328576  0.3984812  0.10116027
+  1       29      0.1328576  0.3984812  0.10116027
+  1       30      0.1328576  0.3984812  0.10116027
+  1       31      0.1328576  0.3984812  0.10116027
+  1       32      0.1328576  0.3984812  0.10116027
+  1       33      0.1328576  0.3984812  0.10116027
+  1       34      0.1328576  0.3984812  0.10116027
+  1       35      0.1328576  0.3984812  0.10116027
+  1       36      0.1328576  0.3984812  0.10116027
+  1       37      0.1328576  0.3984812  0.10116027
+  1       38      0.1328576  0.3984812  0.10116027
+  2        2      0.1542822  0.1884954  0.12244084
+  2        3      0.1514754  0.2177614  0.11981251
+  2        4      0.1473989  0.2594755  0.11611644
+  2        5      0.1426794  0.3058650  0.11115796
+  2        6      0.1401865  0.3298422  0.10917865
+  2        7      0.1384874  0.3463073  0.10764161
+  2        8      0.1363060  0.3665916  0.10535826
+  2        9      0.1352431  0.3769944  0.10439539
+  2       10      0.1346738  0.3829790  0.10412362
+  2       11      0.1336340  0.3924731  0.10278596
+  2       12      0.1328728  0.3994233  0.10183836
+  2       13      0.1318672  0.4082812  0.10093042
+  2       14      0.1307921  0.4177503  0.10013719
+  2       15      0.1298955  0.4254009  0.09936189
+  2       16      0.1290102  0.4329946  0.09846298
+  2       17      0.1283585  0.4384733  0.09786777
+  2       18      0.1279850  0.4419942  0.09761995
+  2       19      0.1276791  0.4448898  0.09742010
+  2       20      0.1274843  0.4469502  0.09699489
+  2       21      0.1270550  0.4505717  0.09632553
+  2       22      0.1265251  0.4549605  0.09574636
+  2       23      0.1261691  0.4578666  0.09571158
+  2       24      0.1261407  0.4583183  0.09567298
+  2       25      0.1259032  0.4604620  0.09545430
+  2       26      0.1261617  0.4584348  0.09566039
+  2       27      0.1263498  0.4570693  0.09573042
+  2       28      0.1263794  0.4568212  0.09576941
+  2       29      0.1264432  0.4561018  0.09570888
+  2       30      0.1264791  0.4558687  0.09574357
+  2       31      0.1264791  0.4558687  0.09574357
+  2       32      0.1264791  0.4558687  0.09574357
+  2       33      0.1264791  0.4558687  0.09574357
+  2       34      0.1264791  0.4558687  0.09574357
+  2       35      0.1264791  0.4558687  0.09574357
+  2       36      0.1264791  0.4558687  0.09574357
+  2       37      0.1264791  0.4558687  0.09574357
+  2       38      0.1264791  0.4558687  0.09574357
 
 RMSE was used to select the optimal model using the smallest value.
-The final value used for the model was maxdepth = 11.</code></pre>
+The final values used for the model were nprune = 25 and degree = 2.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>rpartPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    rpartTune,</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>marsPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    marsTune,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>m5Tune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>rpartTune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"M5"</span>,</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>),</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">Weka_control</span>(<span class="at">M =</span> <span class="dv">10</span>)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rpart2"</span>,</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneLength =</span> <span class="dv">10</span>,</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>)</span>
 <span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>m5Tune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>rpartTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Model Tree 
+<pre><code>CART 
 
-1631 samples
-  31 predictor
+1962 samples
+  24 predictor
 
 No pre-processing
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 1469, 1469, 1468, 1468, 1468, 1469, ... 
+Summary of sample sizes: 1766, 1766, 1766, 1765, 1767, 1765, ... 
+Resampling results across tuning parameters:
+
+  maxdepth  RMSE       Rsquared   MAE      
+   1        0.1523146  0.2119612  0.1201254
+   2        0.1496315  0.2395631  0.1178115
+   3        0.1459342  0.2776622  0.1148154
+   4        0.1457576  0.2786126  0.1141662
+   5        0.1444241  0.2928356  0.1128590
+   6        0.1432122  0.3047941  0.1110184
+   7        0.1410279  0.3258310  0.1091335
+   9        0.1378816  0.3541764  0.1059367
+  11        0.1363541  0.3681296  0.1046191
+  12        0.1357220  0.3753388  0.1034858
+
+RMSE was used to select the optimal model using the smallest value.
+The final value used for the model was maxdepth = 12.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>rpartPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>    rpartTune,</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>m5Tune <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    StudentData_train_x,</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>    StudentData_train_y,</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"M5"</span>,</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>),</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">Weka_control</span>(<span class="at">M =</span> <span class="dv">10</span>)</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>m5Tune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model Tree 
+
+1962 samples
+  24 predictor
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 1766, 1766, 1765, 1766, 1767, 1765, ... 
 Resampling results across tuning parameters:
 
   pruned  smoothed  rules  RMSE       Rsquared    MAE       
-  Yes     Yes       Yes    1.1366185  0.25025375  0.66145002
-  Yes     Yes       No     0.4008688  0.39706345  0.34988728
-  Yes     No        Yes    0.1450165  0.39605847  0.09718701
-  Yes     No        No     0.1705464  0.37269597  0.09931158
-  No      Yes       Yes    1.3770318  0.01689254  0.59629505
-  No      Yes       No     0.3868197  0.43345928  0.34594068
-  No      No        Yes    0.1433173  0.36614315  0.10325043
-  No      No        No     0.1379532  0.42095454  0.09498528
+  Yes     Yes       Yes    1.2458573  0.05795690  0.68422651
+  Yes     Yes       No     1.4010964  0.20315979  1.13293419
+  Yes     No        Yes    0.1302646  0.43411860  0.09838884
+  Yes     No        No     0.1345841  0.43035628  0.09473805
+  No      Yes       Yes    1.2468725  0.05158761  0.68043245
+  No      Yes       No     1.4017614  0.20889386  1.13413877
+  No      No        Yes    0.1454876  0.35179249  0.10366004
+  No      No        No     0.1314663  0.46889584  0.09110417
 
 RMSE was used to select the optimal model using the smallest value.
-The final values used for the model were pruned = No, smoothed = No and rules
- = No.</code></pre>
+The final values used for the model were pruned = Yes, smoothed = No and
+ rules = Yes.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>m5Pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>    m5Tune,</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>m5Pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    m5Tune,</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> StudentData_test_x</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="compare-model-fit-and-select-optimal-model" class="level2">
 <h2 class="anchored" data-anchor-id="compare-model-fit-and-select-optimal-model">Compare model fit and select optimal model</h2>
 <p>Next, we compare fit and pick model to export.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>ranking <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">Model =</span> <span class="fu">c</span>(</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"PLS"</span>,</span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Elastic Net"</span>,</span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"KNN"</span>,</span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"MARS"</span>,</span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Single Tree"</span>,</span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Model Tree"</span></span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(</span>
-<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> plsPred, <span class="at">obs =</span> StudentData_test_y),</span>
-<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> enetPred, <span class="at">obs =</span> StudentData_test_y),</span>
-<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> knnPred, <span class="at">obs =</span> StudentData_test_y),</span>
-<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> marsPred, <span class="at">obs =</span> StudentData_test_y),</span>
-<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> rpartPred, <span class="at">obs =</span> StudentData_test_y),</span>
-<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> m5Pred, <span class="at">obs =</span> StudentData_test_y)</span>
-<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(RMSE)</span>
-<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a>ranking</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>ranking <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">Model =</span> <span class="fu">c</span>(</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"PLS"</span>,</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Elastic Net"</span>,</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"KNN"</span>,</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"MARS"</span>,</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Single Tree"</span>,</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Model Tree"</span></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> plsPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> enetPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> knnPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> marsPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> rpartPred, <span class="at">obs =</span> StudentData_test_y),</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">postResample</span>(<span class="at">pred =</span> m5Pred, <span class="at">obs =</span> StudentData_test_y)</span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(RMSE)</span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>ranking</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        Model      RMSE  Rsquared        MAE
-1         KNN 0.1218347 0.5227203 0.09077150
-2        MARS 0.1268342 0.4816102 0.09488807
-3  Model Tree 0.1304262 0.4911121 0.08767047
-4         PLS 0.1345812 0.4156022 0.10310097
-5 Elastic Net 0.1387124 0.3797177 0.10456975
-6 Single Tree 0.1401199 0.3691956 0.10504268</code></pre>
+1        MARS 0.1272761 0.4648325 0.09312472
+2         KNN 0.1345978 0.4043236 0.10111539
+3 Single Tree 0.1383991 0.3690571 0.10465582
+4         PLS 0.1393725 0.3598857 0.10551285
+5 Elastic Net 0.1395623 0.3583227 0.10572661
+6  Model Tree 0.1498461 0.3231580 0.10230842</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>best <span class="ot">&lt;-</span> ranking[<span class="dv">1</span>, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>best <span class="ot">&lt;-</span> ranking[<span class="dv">1</span>, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>The KNN model gives the optimal resampling and test set performance since it has the lowest RMSE and highest R squared.</strong></p>
+<p><strong>The MARS model gives the optimal resampling and test set performance since it has the lowest RMSE and highest R squared.</strong></p>
 </section>
 <section id="predict-ph-for-test-set" class="level2">
 <h2 class="anchored" data-anchor-id="predict-ph-for-test-set">Predict pH for test set</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict pH for the test set using the best model</span></span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"PLS"</span>) {</span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> plsTune</span>
-<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"Elastic Net"</span>) {</span>
-<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> enetTune</span>
-<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"KNN"</span>) {</span>
-<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> knnTune</span>
-<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"MARS"</span>) {</span>
-<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> marsTune</span>
-<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"Single Tree"</span>) {</span>
-<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> rpartTune</span>
-<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"Model Tree"</span>) {</span>
-<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> m5Tune</span>
-<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>StudentEvaluation_x <span class="ot">&lt;-</span> StudentEvaluation <span class="sc">|&gt;</span></span>
-<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>PH) <span class="sc">|&gt;</span></span>
-<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">drop_na</span>() <span class="co"># &lt;!--NB to DELETE this line after imputation section is completed--&gt;</span></span>
-<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine predictions with the test set</span></span>
-<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>    StudentEvaluation_x,</span>
-<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">PH =</span> <span class="fu">predict</span>(finalTune, <span class="at">newdata =</span> StudentEvaluation_x)</span>
-<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict pH for the test set using the best model</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"PLS"</span>) {</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> plsTune</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"Elastic Net"</span>) {</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> enetTune</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"KNN"</span>) {</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> knnTune</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"MARS"</span>) {</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> marsTune</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"Single Tree"</span>) {</span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> rpartTune</span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (best <span class="sc">==</span> <span class="st">"Model Tree"</span>) {</span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>    finalTune <span class="ot">&lt;-</span> m5Tune</span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>StudentEvaluation_x <span class="ot">&lt;-</span> StudentEvaluation <span class="sc">|&gt;</span></span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>PH) </span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine predictions with the test set</span></span>
+<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>    StudentEvaluation_x,</span>
+<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">PH =</span> <span class="fu">predict</span>(finalTune, <span class="at">newdata =</span> StudentEvaluation_x)</span>
+<span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
+<span id="cb62-24"><a href="#cb62-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">PH =</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="export" class="level2">
 <h2 class="anchored" data-anchor-id="export">Export</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export predictions to Excel</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(predictions, <span class="st">"PH_forecasts.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export predictions to Excel</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(predictions, <span class="st">"PH_forecasts.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="conclusion" class="level2">
