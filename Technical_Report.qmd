@@ -146,11 +146,15 @@ high_cor_indices <- findCorrelation(cor_matrix, cutoff = threshold)
 StudentData <- StudentData[, -high_cor_indices]
 #Removed hyd_pressure2, hyd_presure4, filler_level, carb_flow , mfr, air_pressure
 
+cor_matrix2<-StudentData|>
+  select_if(is.numeric)|>
+  cor()
+
 ```
 
 ```{r}
 ##Correlation Plot
-corrplot(StudentData, method = "color", type="upper",
+corrplot(cor_matrix2, method = "color", type="upper",
          tl.col = "black", tl.cex = .8,
          addCoef.col ="black", number.cex = .5,
          diag=FALSE)
