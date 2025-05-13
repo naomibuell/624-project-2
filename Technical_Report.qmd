@@ -41,7 +41,6 @@ library(tidyr)
 library(mice)
 library(janitor)
 library(dplyr)
-
 ```
 
 We will also set the seed for reproducibility.
@@ -123,8 +122,14 @@ Removed near zero variance variables.
 
 ```{r}
 #| include: false
+
+# Save removed column name
+nzv_cols <- names(StudentData)[nearZeroVar(StudentData)]
+# Remove near zero variance columns
 StudentData <- StudentData[, -nearZeroVar(StudentData)]
 ```
+
+`r nzv_cols` was removed as it had near zero variance.
 
 ```{r}
 #| echo: false
@@ -197,7 +202,7 @@ Lastly, we change all variable types to numeric.
 StudentData <- StudentData[, sapply(
     StudentData,
     is.numeric
- )]
+)]
 ```
 
 ## Exploratory Data Analysis
@@ -474,7 +479,35 @@ ranking
 best <- ranking[1, 1]
 ```
 
-**The `r best` model gives the optimal resampling and test set performance since it has the lowest RMSE and highest R squared.**
+The **`r best` model** gives the optimal resampling and test set performance since it has the lowest RMSE and highest R squared. 
+
+We plot the importance of the variables used, as well as the predicted vs actual values below.
+
+```{r}
+#| label: plot-model
+
+# Plot variable importance for MARS model
+plot(varImp(marsTune))
+
+# Plot predicted vs actual values
+pred_data <- data.frame(
+    predicted = as.numeric(marsPred),
+    actual = as.numeric(StudentData_test_y)
+)
+ggplot(pred_data, aes(x = actual, y = predicted)) +
+    geom_point(alpha = 0.5) +
+    geom_abline(color = "red") +
+    labs(
+        x = "Actual pH",
+        y = "Predicted pH",
+    ) +
+    coord_fixed(ratio = 1) +
+    theme_classic() +
+    scale_x_continuous(breaks = seq(8, 10, by = 0.2)) +
+    scale_y_continuous(breaks = seq(8, 10, by = 0.2))
+```
+
+The trend line is close to the 45-degree line, indicating that the model is performing well. The points are scattered around the line, suggesting that the model is able to predict pH levels accurately.
 
 ## Predict pH for test set
 
@@ -497,14 +530,14 @@ if (best == "PLS") {
 }
 
 StudentEvaluation_x <- StudentEvaluation |>
-    select(-PH) 
+    select(-PH)
 
 # Combine predictions with the test set
 predictions <- data.frame(
     StudentEvaluation_x,
     PH = predict(finalTune, newdata = StudentEvaluation_x)
-) |> 
-  rename(PH = y)
+) |>
+    rename(PH = y)
 ```
 
 ## Export
