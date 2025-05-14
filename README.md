@@ -8,10 +8,10 @@ This project addresses new regulatory requirements for ABC Beverage Company by a
 
 ## Project Contents
 
--   Non-Technical Report: [Google Docs Link](https://docs.google.com/document/d/1d8GVdmhSgmLv7RbIlDRXptjA4X7Tk-9nf_KX27u-PG4/edit?usp=sharing)
--   `Technical_Report.Qmd`: Technical report with all code and modeling steps
--   `TechnicalReport.pdf`: PDF render of technical report.
--   `PH_forecasts.xlsx`: Final predictions for the pH values of the evaluation dataset (exported results)
+-   `Non-Technical Report.pdf`: Non-technical report
+-   `Technical_Report.Qmd`: Technical report, including code and documentation
+-   `TechnicalReport.pdf`: PDF render of technical report, including code output
+-   `PH_forecasts.xlsx`: Final predictions for the pH values of the evaluation dataset
 
 ## Libraries Used
 
